@@ -34,12 +34,10 @@ namespace DataGridView_Import_Excel
             dataGridView1.DefaultCellStyle.WrapMode= DataGridViewTriState.True;
             dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            label1.AutoSize = false;
-            label1.Size = new Size(300,20);
         }
 
         private
-            void btnSelect_Click(object sender, EventArgs e)
+            void BtnSelect_Click(object sender, EventArgs e)
         {
 
             Cursor = Cursors.WaitCursor;
@@ -56,7 +54,7 @@ namespace DataGridView_Import_Excel
         }
 
         private
-            void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+            void OpenFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Cursor = Cursors.WaitCursor;
             string filePath = openFileDialog1.FileName;
@@ -91,8 +89,7 @@ namespace DataGridView_Import_Excel
                     con.Close();
                 }
             }
-            List<string> MyList = new List<string>();
-            List<string> MyListNd = new List<string>();
+           
 
             //Read Data from the First Sheet.
             using (OleDbConnection con = new OleDbConnection(conStr))
@@ -105,7 +102,6 @@ namespace DataGridView_Import_Excel
                         try
                         {
                             DataTable dt = new DataTable();
-                            DataTable dt1 = new DataTable();
 
                             cmd.CommandText = "SELECT * From [" + sheetName + "]";
                             cmd.Connection = con;
@@ -114,120 +110,39 @@ namespace DataGridView_Import_Excel
                             oda.Fill(dt);
                             con.Close();
 
-                            Saloon Q3_326 = new Saloon("Audi Q3 AU326");
+                            Saloon Q3_326 = new Saloon("Audi Q3");
+                            Saloon G11 = new Saloon("G11");
+                            Saloon G3 = new Saloon("G3");
+                            Saloon BR223 = new Saloon("BR223");
+                            Saloon Skoda = new Saloon("SK38");
+
+
+
                             foreach (DataRow row in dt.Rows)
-                            { 
-                                if (row[6].ToString().Contains("Audi") || row[6].ToString().Contains("AU316"))
+                            {
+                                if (row[6].ToString().Contains("Audi") && row[6].ToString().Contains("Q3"))
                                 {
-                                    
-                                    if(row[6].ToString().Contains("FC"))
-                                    {
-                                        Q3_326.FCcount += 1;
-                                        Q3_326.FCtime += Convert.ToInt16(row[7].ToString());
-                                    }
-                                    else if (row[6].ToString().Contains("FB"))
-                                    {
-                                        Q3_326.FBcount += 1;
-                                        Q3_326.FBtime += Convert.ToInt16(row[7].ToString());
-                                    }
-                                    
-                                    else if (row[6].ToString().Contains("RB") )
-                                    {
-                                        if (row[6].ToString().Contains("RB60"))
-                                        {
-                                            Q3_326.RB60count += 1;
-                                            Q3_326.RB60time += Convert.ToInt16(row[7].ToString());
-                                        }
-                                        else  if (row[6].ToString().Contains("RB40") || row[6].ToString().Contains("RB20"))
-                                        {
-                                            if (row[6].ToString().Contains("RB40"))
-                                            {
-                                                Q3_326.RB40count += 1;
-                                                Q3_326.RB40time += Convert.ToInt16(row[7].ToString());
-                                            }
-                                            else if (row[6].ToString().Contains("RB20"))
-                                            {
-                                                Q3_326.RB20count += 1;
-                                                Q3_326.RB20time += Convert.ToInt16(row[7].ToString());
-                                            }
-                                        }
-                                    }
-                                    else if (row[6].ToString().Contains("RC") && !row[6].ToString().Contains("AU316"))
-                                    {
-                                        if (row[6].ToString().Contains("RC40") || row[6].ToString().Contains("RC20"))
-                                        {
-                                           
-                                                Q3_326.RC40count += 1;
-                                                Q3_326.RC40time += Convert.ToInt16(row[7].ToString());
-                                           
-                                        }
-                                        else if (row[6].ToString().Contains("RC60"))
-                                        {
-                                            Q3_326.RC60count += 1;
-                                            Q3_326.RC60time += Convert.ToInt16(row[7].ToString());
-                                        }
-                                        else
-                                        {
-                                            Q3_326.RCcount += 1;
-                                            Q3_326.RCtime += Convert.ToInt16(row[7].ToString());
-                                        }
-
-                                    }
-                                   
-
+                                    Calculation.Q3calc(row,ref Q3_326);
+                                }
+                                else if(row[6].ToString().ToUpper().Contains("G1"))
+                                {
+                                    Calculation.G11calc(row, ref G11);
+                                }
+                                else if(row[6].ToString().ToUpper().Contains("G3Y") || row[6].ToString().ToUpper().Contains("F90"))
+                                {
+                                    Calculation.G3calc(row, ref G3);
+                                }
+                                else if(row[6].ToString().ToUpper().Contains("BR223"))
+                                {
+                                    Calculation.BR223calc(row, ref BR223);
+                                }
+                                else if(row[6].ToString().ToUpper().Contains("SK38"))
+                                {
+                                    Calculation.SK38calc(row,ref Skoda);
                                 }
 
                             }
-
-                           
-
-                            //int[] MyListSum = new int[MyListNd.Count];
-                            //int[] MyListSum1 = new int[MyListNd.Count];
-                            //int[] MyListSum2 = new int[MyListNd.Count];
-                            //for (int i = 0; i < MyListNd.Count; i++)
-                            //{
-                            //    MyListSum[i] = 0;
-                            //    MyListSum1[i] = 0;
-                            //    MyListSum2[i] = 0;
-                            //}
-
-                            //string[] MyListName = new string[MyList.Count];
-                            //int k = 0;
-                            //foreach (DataRow row in dt.Rows)
-                            //{
-                            //    if (row[1].ToString() == "")
-                            //    {
-                            //        row[1] = "0";
-                            //    }
-                            //    k = MyListNd.IndexOf(row[0].ToString());
-                            //    MyListSum[k] = MyListSum[k] + Convert.ToInt32(row[1].ToString().Replace(".",string.Empty).Replace(",000", string.Empty));
-                            //    MyListName[k] = row[2].ToString();
-                            //}
-                            //foreach (DataRow row in dt1.Rows)
-                            //{
-                            //    if(row[1].ToString()=="")
-                            //    {
-                            //        row[1] = "0";
-                            //    }
-                            //    if (MyListNd.Contains(row[0].ToString()))
-                            //    {
-                            //        k = MyListNd.IndexOf(row[0].ToString());
-                            //        MyListSum1[k] = MyListSum1[k] + Convert.ToInt32(row[1].ToString().Replace(".",string.Empty).Replace(",000", string.Empty));
-                            //    }
-
-                            //}
-
-                            //k = 0;
-                            //foreach (string p in MyListNd)
-                            //{
-                            //    Console.Write(p + " ");
-                            //    Console.Write(MyListSum[k] + " ");
-                            //    Console.Write(MyListSum1[k] + " ");
-                            //    Console.Write(MyListSum2[k] + " ");
-                            //    Console.WriteLine(MyListName[k]);
-                            //    k++;
-                            //}
-                           
+                      
                             DataTable result = new DataTable();
                             result.Clear();
                             result.Columns.Add("Проект");
@@ -242,51 +157,72 @@ namespace DataGridView_Import_Excel
                             
                             Q3_326.RCcount = Q3_326.RC40count + Q3_326.RC60count;
                             Q3_326.RCtime = Q3_326.RC40time + Q3_326.RC60time;
-                            Q3_326.Coef = 9;
-                     
+                            Q3_326.Coef = 9.0;
                             Cars.Add(Q3_326);
+                            G11.Coef = 7.5;
+                            G3.Coef = 4.0;
+                            Cars.Add(G11);
+                            Cars.Add(G3);
+
+                            BR223.Coef = 8.0;
+                            Cars.Add(BR223);
+
+                            Skoda.Coef = 3.0;
+                            Cars.Add(Skoda);
 
                             foreach (Saloon car in Cars)
                             {
                                 DataRow row1 = result.NewRow();
-                                row1["Проект"] = car.ProjectName;
-                                row1["Кількість чохлів"] = "\n FB = " + car.FBcount
-                                    + "\n" + " FC= " + car.FCcount
-                                    + "\n" + " RB= " + (car.RBcount + car.RB60count + car.RB40count)
-                                    + "\n" + " RB20= " + car.RB20count
-                                    + "\n" + " RC= " + car.RCcount + "\n";
-                                row1["Загальний час"] = "\n FB time = " + car.FBtime
-                                    + "\n" + " FC time= " + car.FCtime
-                                    + "\n" + " RB time= " + (car.RBtime+car.RB40time+car.RB60time)
-                                    + "\n" + " RB20 time= " + car.RB20time
-                                    + "\n" + " RC time= " + car.RCtime + "\n";
-                                row1["Час на одну штуку"] = "\n FB time for pcs= " +Math.Round( car.PartTime(car.FBtime,car.FBcount),3)
-                                    + "\n" + " FC time for pcs= " +Math.Round( car.PartTime(car.FCtime, car.FCcount),3)
-                                    + "\n" + " RB time for pcs= " +Math.Round( car.PartTime(car.RB60time+car.RB40time, car.RB60count+car.RB40count),3)
-                                    + "\n" + " RB20 time for pcs= " +Math.Round( car.PartTime(car.RB20time, car.RB20count),3)
-                                    + "\n" + " RC time for pcs= " +Math.Round( car.PartTime(car.RCtime+car.RC40time+car.RC60time, car.RCcount+car.RC40count+car.RC60count),3)+ "\n";
-                                row1["Час на салон"] =Math.Round( car.TimeSaloon(),3);
-                                row1["Кількість салонів"] = Math.Floor(car.GeneralCount() / car.Coef);
-                                row1["Середній час на одну штуку"] = Math.Round(car.AvgTime(),3);
+                                if (car.ProjectName == "Audi Q3")
+                                {
+                                    FormatRow.Q3row(car, ref row1);
+                                }
+                                else if(car.ProjectName == "G11")
+                                {
+                                    FormatRow.G11row(car, ref row1);
+                                }
+                                else if(car.ProjectName == "G3")
+                                {
+                                    FormatRow.G3row(car, ref row1);
+                                }
+                                else if (car.ProjectName == "BR223")
+                                {
+                                    FormatRow.BR223row(car, ref row1);
+                                }
+                                else if(car.ProjectName == "SK38")
+                                {
+                                    FormatRow.SK38row(car, ref row1);
+                                }
                                 //row1["Кількість комлектних салонів"] = car.CompleteSaloons();
                                 result.Rows.Add(row1);
                             }
-                            /*DataRow row2 = result.NewRow();
-                            row2["Проект"] = Q3_RB20.ProjectName;
-                            row2["Кількість чохлів"] = "\n RB = " + Q3_RB20.RBcount;
-                            row2["Загальний час"] = "\n FB time = " + Q3_RB20.RBtime;
-                            if (Q3_RB20.RBtime == 0 || Q3_RB20.RBcount == 0)
-                            {
-                                row2["Час на одну штуку"] = "\n FB time for pcs= " + 0;
-                            }
-                            else
-                            {
-                                row2["Час на одну штуку"] = "\n FB time for pcs= " + Q3_RB20.RBtime / Q3_RB20.RBcount;
-                            }
-                            row2["Час на салон"] = 0;
+
+                            DataRow row2 = result.NewRow();
+                            row2["Проект"] = "BMW Voga";
+                            row2["Кількість чохлів"] = "\n FB = " + (G11.FBcount + G3.FBcount)
+                                + "\n" + " FC= " + (G11.FCcount + G3.FCcount) + "\n";
+                            row2["Загальний час"] = "\n FB time = " + (G11.FBtime + G3.FBtime)
+                                + "\n" + " FC time= " + (G11.FCtime + G11.FCtime) + "\n";
+                            row2["Час на одну штуку"] = "\n FB time for pcs= " + Math.Round(G11.PartTime(G11.FBtime + G3.FBtime, G11.FBcount + G3.FBcount), 3)
+                                + "\n" + " FC time for pcs= " + Math.Round(G11.PartTime(G11.FCtime + G11.FCtime, G11.FCcount + G3.FCcount), 3) + "\n";
+                            row2["Час на салон"] = Math.Round((G11.PartTime(G11.FBtime + G3.FBtime, G11.FBcount + G3.FBcount) * 2 + 2 * G11.PartTime(G11.FCtime + G11.FCtime, G11.FBcount + G3.FBcount)) / 0.65);
+                            row2["Кількість салонів"] = Math.Floor((G11.FBcount + G3.FBcount + G11.FCcount + G3.FCcount) / 4.0);
+                            row2["Середній час на одну штуку"] = Math.Round(((double)(G11.FBtime + G3.FBtime + G11.FCtime + G3.FCtime) / (double)(G11.FCcount + G3.FCcount + G11.FBcount + G3.FBcount)), 3);
                             result.Rows.Add(row2);
-                            */
-                            //Populate DataGridView
+
+                            DataRow row3 = result.NewRow();
+                            row3["Проект"] = "BMW Higa";
+                            row3["Кількість чохлів"] = "\n RB = " + G11.RBcount
+                                + "\n" + " RC= " + (G11.RC40count + G11.RC100count) + "\n";
+                            row3["Загальний час"] = "\n RB = " + G11.RBtime
+                                + "\n" + " RC time= " + G11.RCtime + "\n";
+                            row3["Час на одну штуку"] = "\n RB time for pcs= " + Math.Round(G11.PartTime(G11.RBtime, G11.RBcount), 3)
+                                + "\n" + " RC time for pcs= " + Math.Round(G11.PartTime(G11.RC100time + G11.RC40time, G11.RC100count + G11.RC40count), 3) + "\n";
+                            row3["Час на салон"] = Math.Round((G11.RC40time / G11.RC40count + 2 * G11.RBtime / G11.RBcount) / 0.35); ;
+                            row3["Кількість салонів"] = Math.Floor((G11.RBcount + G11.RCcount) / 3.5);
+                            row3["Середній час на одну штуку"] = Math.Round(((double)(G11.RBtime + G11.RCtime) / (double)(G11.RC40count + G11.RC100count + G11.RBcount)), 3);
+                            result.Rows.Add(row3);
+
                             dataGridView1.DataSource = result;
                             Cursor = Cursors.Arrow;
                         }
@@ -306,7 +242,7 @@ namespace DataGridView_Import_Excel
         }
 
         private
-            void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+            void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             //foreach (DataGridViewRow Myrow in dataGridView1.Rows)
             //{ //Here 2 cell is target value and 1 cell is Volume
@@ -321,7 +257,7 @@ namespace DataGridView_Import_Excel
             //}
         }
         private
-            void button1_Click(object sender, EventArgs e)
+            void Button1_Click(object sender, EventArgs e)
 
         {
             SaveFileDialog openDlg = new SaveFileDialog();
@@ -380,16 +316,16 @@ System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.
 
                 xlApp.Quit();
 
-                releaseObject(xlWorkSheet);
+                ReleaseObject(xlWorkSheet);
 
-                releaseObject(xlWorkBook);
+                ReleaseObject(xlWorkBook);
 
-                releaseObject(xlApp);
+                ReleaseObject(xlApp);
             }
         }
 
         private
-            void releaseObject(object obj)
+            void ReleaseObject(object obj)
 
         {
 
@@ -420,7 +356,7 @@ System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.
         }
 
         private
-            void btnPrint_Click_1(object sender, EventArgs e)
+            void BtnPrint_Click_1(object sender, EventArgs e)
         {
             DGVPrinter printer = new DGVPrinter();
 
@@ -437,11 +373,13 @@ System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.
 
 
             printer.HeaderCellAlignment = StringAlignment.Center;
-            printer.ColumnWidths.Add("Проект",130);
-            printer.ColumnWidths.Add("Кількість чохлів", 130);
-            printer.ColumnWidths.Add("Загальний час", 130);
-            printer.ColumnWidths.Add("Час на одну штуку", 130);
-            printer.ColumnWidths.Add("Час на салон", 130);
+            printer.ColumnWidths.Add("Проект",90);
+            printer.ColumnWidths.Add("Кількість чохлів", 90);
+            printer.ColumnWidths.Add("Загальний час", 90);
+            printer.ColumnWidths.Add("Час на одну штуку", 110);
+            printer.ColumnWidths.Add("Час на салон", 90);
+            printer.ColumnWidths.Add("Кількість салонів", 90);
+            printer.ColumnWidths.Add("Середній час на одну штуку", 90);
             printer.Footer = "BADER";
 
             printer.FooterSpacing = 15;
@@ -450,7 +388,7 @@ System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.
             printer.PrintDataGridView(dataGridView1);
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void Label1_Click(object sender, EventArgs e)
         {
 
         }

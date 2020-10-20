@@ -35,7 +35,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.btnPrint = new System.Windows.Forms.Button();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,78 +46,72 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 58);
+            this.dataGridView1.Location = new System.Drawing.Point(16, 71);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(960, 392);
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.Size = new System.Drawing.Size(1280, 482);
             this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellContentClick);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.Filter = "Excel Files|*.xls;*.xlsx";
-            this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
+            this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.OpenFileDialog1_FileOk);
             // 
             // btnSelect
             // 
-            this.btnSelect.Location = new System.Drawing.Point(12, 12);
+            this.btnSelect.Location = new System.Drawing.Point(16, 15);
+            this.btnSelect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(98, 40);
+            this.btnSelect.Size = new System.Drawing.Size(131, 49);
             this.btnSelect.TabIndex = 2;
             this.btnSelect.Text = "Вибрати файл";
             this.btnSelect.UseVisualStyleBackColor = true;
-            this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
+            this.btnSelect.Click += new System.EventHandler(this.BtnSelect_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(116, 12);
+            this.button1.Location = new System.Drawing.Point(155, 15);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 40);
+            this.button1.Size = new System.Drawing.Size(133, 49);
             this.button1.TabIndex = 3;
             this.button1.Text = "експорт в  excel";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // btnPrint
             // 
-            this.btnPrint.Location = new System.Drawing.Point(222, 12);
+            this.btnPrint.Location = new System.Drawing.Point(296, 15);
+            this.btnPrint.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(100, 38);
+            this.btnPrint.Size = new System.Drawing.Size(133, 47);
             this.btnPrint.TabIndex = 4;
             this.btnPrint.Text = "друк";
             this.btnPrint.UseVisualStyleBackColor = true;
-            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click_1);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(328, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(284, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "FB=17%;FC=10%;RC=10.5%;RB=13% (Дані відділу REFA)\r\n";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.btnPrint.Click += new System.EventHandler(this.BtnPrint_Click_1);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(984, 462);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(1312, 569);
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.dataGridView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(1000, 500);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(1327, 605);
             this.Name = "Form1";
             this.Text = "Продуктивність";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -130,7 +123,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnPrint;
         private System.Drawing.Printing.PrintDocument printDocument1;
-        private System.Windows.Forms.Label label1;
     }
 }
 

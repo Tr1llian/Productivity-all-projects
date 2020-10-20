@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DataGridView_Import_Excel
 {
-    class Saloon
+    public class Saloon
     {
         public string ProjectName;
         public int FCtime;
         public int FCcount;
 
 
-
+        public int VSTcount;
+        public int VSTtime;
 
         public int FBtime;
         public int FBcount;
@@ -24,7 +23,11 @@ namespace DataGridView_Import_Excel
 
         public int RC40time;
         public int RC40count;
-        
+
+        public int RC100time;
+        public int RC100count;
+
+
 
         public int RC60time;
         public int RC60count;
@@ -43,7 +46,7 @@ namespace DataGridView_Import_Excel
         public int RBtime;
         public int RBcount;
 
-        public int Coef = 1;
+        public double Coef = 1;
 
         public  Saloon(string c)
         {
@@ -94,6 +97,266 @@ namespace DataGridView_Import_Excel
             }
             else return 0;
         }
+
+        public double TimeSaloonSK38()
+        {
+            RBtime += RB40time + RB60time;
+            RBcount += RB60count + RB40count;
+
+            if (FCtime != 0 && FBtime != 0 && RBtime != 0 && RCtime != 0)
+            {
+                return 2 * PartTime(FCtime, FCcount) + 2 * PartTime(FBtime, FBcount) + 2 * PartTime(RBtime, RBcount) + PartTime(RCtime, RCcount);
+            }
+            else if (FCtime != 0 && FBtime != 0 && RBtime == 0 && RCtime == 0)
+            {
+                return (2 * PartTime(FCtime, FCcount) + 2 * PartTime(FBtime, FBcount)) / 0.582;
+            }
+            else if (FCtime == 0 && FBtime == 0 && RBtime != 0 && RCtime != 0)
+            {
+                return (PartTime(RCtime, RCcount) + PartTime(RB40time, RB40count) + PartTime(RB60time, RB60count)) / 0.418;
+            }
+            else if (FCtime == 0 && FBtime == 0 && RBtime == 0 && RCtime != 0)
+            {
+                return (RCtime / RCcount) / 0.1852;
+            }
+            else if (FCtime == 0 && FBtime == 0 && RBtime != 0 && RCtime == 0)
+            {
+                return (PartTime(RB40time, RB40count) + PartTime(RB60time, RB60count)) / 0.2328;
+            }
+            else if (FCtime != 0 && FBtime == 0 && RBtime == 0 && RCtime == 0)
+            {
+                return (PartTime(FCtime, FCcount)) / 0.0931;
+            }
+            else if (FCtime == 0 && FBtime != 0 && RBtime == 0 && RCtime == 0)
+            {
+                return (PartTime(FBtime, FBcount)) / 0.198;
+            }
+            else
+            {
+                return 0;
+            }
+
+            /*
+            if (FCtime != 0 && FBtime != 0 && RBtime != 0 && RCtime != 0)
+            {
+                return 2*(PartTime(FCtime / FCcount) + PartTime(FBtime ,FBcount) + PartTime(RBtime,RBcount) + PartTime(RCtime , RCcount)) ;
+            }
+            if (FCtime != 0 && FBtime != 0 && RBtime == 0 && RCtime == 0)
+            {
+                return (2 * PartTime(FCtime / FCcount) + 2 * PartTime(FBtime ,FBcount)) / 0.65;
+            }
+            else if (FCtime == 0 && FBtime == 0 && RBtime != 0 && RCtime != 0)
+            {
+                return ( RBtime / RCcount +  PartTime(RCtime , RCcount)) / 0.35;
+            }
+            else if (FCtime != 0 && FBtime == 0 && RBtime == 0 && RCtime == 0)
+            {
+                return (PartTime(FCtime / FCcount)) / 0.1;
+            }
+            else if (FCtime == 0 && FBtime != 0 && RBtime == 0 && RCtime == 0)
+            {
+                return (PartTime(FBtime ,FBcount)) / 0.17;
+            }
+            else if (FCtime == 0 && FBtime == 0 && RBtime != 0 && RCtime == 0)
+            {
+                return (RBtime / RBcount) / 0.1;
+            }
+            else if (FCtime == 0 && FBtime == 0 && RBtime == 0 && RCtime != 0)
+            {
+                return (PartTime(RCtime , RCcount)) / 0.1;
+            }
+            else if (FCtime != 0 && FBtime == 0 && RBtime != 0 && RCtime != 0)
+            {
+                return (RBtime / FCcount + PartTime(RCtime , RCcount)) / 0.35/2 + (PartTime(FCtime / FCcount)) / 0.1 / 2;
+            }
+            else if (FCtime == 0 && FBtime != 0 && RBtime != 0 && RCtime != 0)
+            {
+                return (2 * RBtime / FCcount + 2 * PartTime(FBtime ,FBcount)) / 0.35/2 + (PartTime(FBtime ,FBcount)) / 0.17 / 2;
+            }
+            else if (FCtime != 0 && FBtime != 0 && RBtime == 0 && RCtime != 0)
+            {
+                return (2 * PartTime(FCtime / FCcount) + 2 * PartTime(FBtime ,FBcount)) / 0.65/2 + (PartTime(RCtime , RCcount)) / 0.1 / 2;
+            }
+            else if (FCtime != 0 && FBtime != 0 && RBtime != 0 && RCtime == 0)
+            {
+                return ((2 * PartTime(FCtime / FCcount) + 2 * PartTime(FBtime ,FBcount)) / 0.65/2 + (RBtime / RBcount) / 0.1/2) ;
+            }
+            else if (FCtime == 0 && FBtime != 0 && RBtime == 0 && RCtime != 0)
+            {
+                return (double)(((PartTime(FBtime ,FBcount)) / 0.1/2 + (PartTime(RCtime , RCcount)) / 0.1)/2);
+            }
+            else if (FCtime != 0 && FBtime == 0 && RBtime == 0 && RCtime != 0)
+            {
+                return (double)(((PartTime(FCtime / FCcount)) / 0.17 / 2 + (PartTime(RCtime , RCcount)) / 0.1) / 2);
+            }
+            else if (FCtime == 0 && FBtime != 0 && RBtime != 0 && RCtime == 0)
+            {
+                return (double)(((PartTime(FBtime ,FBcount)) / 0.1 / 2 + (RBtime / RBcount) / 0.1) / 2);
+            }
+            else if (FCtime != 0 && FBtime == 0 && RBtime!=0 && RCtime == 0)
+            {
+                return (double)(((PartTime(FCtime / FCcount)) / 0.17 / 2 + (RBtime / RBcount) / 0.1) / 2);
+            }
+             
+            else
+            {
+                return 0;
+            }
+            */
+
+
+        }
+
+        public double AvgTimeBR223()
+        {
+            double AllCount = FCcount + FBcount + VSTcount + RB40count + RB60count + RC40count + RC60count + RCcount + RBcount;
+            double AllTime = FCtime + FBtime + RBtime + RCtime + VSTtime;
+            if (AllCount == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return AllTime / AllCount;
+            }
+        }
+
+        public int GeneralCountBR223()
+        {
+            return FCcount + FBcount + VSTcount + RB40count + RB60count + RC40count + RC60count + RCcount + RBcount;
+        }
+
+        public double TimeSaloonBR223()
+        {
+            RBtime += RB40time + RB60time;
+            RBcount += RB60count + RB40count;
+            if (VSTtime != 0 && VSTcount != 0)
+            {
+                if (FCtime != 0 && FBtime != 0 && RBtime != 0 && RCtime != 0)
+                {
+                    return 2 * PartTime(FCtime, FCcount) + 2 * PartTime(FBtime, FBcount) + 2 * PartTime(RBtime, RBcount) + 2 * PartTime(RCtime, RCcount) + PartTime(VSTtime, VSTcount);
+                }
+                else if (FCtime != 0 && FBtime != 0 && RBtime == 0 && RCtime == 0)
+                {
+                    return (2 * PartTime(FCtime, FCcount) + 2 * PartTime(FBtime, FBcount)) / 0.4656 + PartTime(VSTtime, VSTcount);
+                }
+                else if (FCtime == 0 && FBtime == 0 && RBtime != 0 && RCtime != 0)
+                {
+                    return (2 * PartTime(RBtime, RBcount) + 2 * PartTime(RCtime, RCcount)) / 0.5346 + PartTime(VSTtime, VSTcount);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                if (FCtime != 0 && FBtime != 0 && RBtime != 0 && RCtime != 0)
+                {
+                    return 2 * PartTime(FCtime, FCcount) + 2 * PartTime(FBtime, FBcount) + 2 * PartTime(RBtime, RBcount) + 2 * PartTime(RCtime, RCcount);
+                }
+                else if (FCtime != 0 && FBtime != 0 && RBtime == 0 && RCtime == 0)
+                {
+                    return (2 * PartTime(FCtime, FCcount) + 2 * PartTime(FBtime, FBcount)) / 0.4656;
+                }
+                else if (FCtime == 0 && FBtime == 0 && RBtime != 0 && RCtime != 0)
+                {
+                    return (2 * PartTime(RBtime, RBcount) + 2 * PartTime(RCtime, RCcount)) / 0.5346;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            /*
+            if (FCtime != 0 && FBtime != 0 && RBtime != 0 && RCtime != 0)
+            {
+                return 2*(PartTime(FCtime , FCcount) + PartTime(FBtime , FBcount) + RBtime/RBcount + PartTime(RCtime , RCcount)) ;
+            }
+            if (FCtime != 0 && FBtime != 0 && RBtime == 0 && RCtime == 0)
+            {
+                return (2 * PartTime(FCtime , FCcount) + 2 * PartTime(FBtime , FBcount)) / 0.65;
+            }
+            else if (FCtime == 0 && FBtime == 0 && RBtime != 0 && RCtime != 0)
+            {
+                return ( RBtime / RCcount +  PartTime(RCtime , RCcount)) / 0.35;
+            }
+            else if (FCtime != 0 && FBtime == 0 && RBtime == 0 && RCtime == 0)
+            {
+                return (PartTime(FCtime , FCcount)) / 0.1;
+            }
+            else if (FCtime == 0 && FBtime != 0 && RBtime == 0 && RCtime == 0)
+            {
+                return (PartTime(FBtime , FBcount)) / 0.17;
+            }
+            else if (FCtime == 0 && FBtime == 0 && RBtime != 0 && RCtime == 0)
+            {
+                return (PartTime(RBtime , RBcount)) / 0.1;
+            }
+            else if (FCtime == 0 && FBtime == 0 && RBtime == 0 && RCtime != 0)
+            {
+                return (PartTime(RCtime , RCcount)) / 0.1;
+            }
+            else if (FCtime != 0 && FBtime == 0 && RBtime != 0 && RCtime != 0)
+            {
+                return (RBtime / FCcount + PartTime(RCtime , RCcount)) / 0.35/2 + (PartTime(FCtime , FCcount)) / 0.1 / 2;
+            }
+            else if (FCtime == 0 && FBtime != 0 && RBtime != 0 && RCtime != 0)
+            {
+                return (2 * RBtime / FCcount + 2 * PartTime(FBtime , FBcount)) / 0.35/2 + (PartTime(FBtime , FBcount)) / 0.17 / 2;
+            }
+            else if (FCtime != 0 && FBtime != 0 && RBtime == 0 && RCtime != 0)
+            {
+                return (2 * PartTime(FCtime , FCcount) + 2 * PartTime(FBtime , FBcount)) / 0.65/2 + (PartTime(RCtime , RCcount)) / 0.1 / 2;
+            }
+            else if (FCtime != 0 && FBtime != 0 && RBtime != 0 && RCtime == 0)
+            {
+                return ((2 * PartTime(FCtime , FCcount) + 2 * PartTime(FBtime , FBcount)) / 0.65/2 + (PartTime(RBtime , RBcount)) / 0.1/2) ;
+            }
+            else if (FCtime == 0 && FBtime != 0 && RBtime == 0 && RCtime != 0)
+            {
+                return (double)(((PartTime(FBtime , FBcount)) / 0.1/2 + (PartTime(RCtime , RCcount)) / 0.1)/2);
+            }
+            else if (FCtime != 0 && FBtime == 0 && RBtime == 0 && RCtime != 0)
+            {
+                return (double)(((PartTime(FCtime , FCcount)) / 0.17 / 2 + (PartTime(RCtime , RCcount)) / 0.1) / 2);
+            }
+            else if (FCtime == 0 && FBtime != 0 && RBtime != 0 && RCtime == 0)
+            {
+                return (double)(((PartTime(FBtime , FBcount)) / 0.1 / 2 + (PartTime(RBtime , RBcount)) / 0.1) / 2);
+            }
+            else if (FCtime != 0 && FBtime == 0 && RBtime!=0 && RCtime == 0)
+            {
+                return (double)(((PartTime(FCtime , FCcount)) / 0.17 / 2 + (PartTime(RBtime , RBcount)) / 0.1) / 2);
+            }
+             
+            else
+            {
+                return 0;
+            }
+            */
+
+
+        }
+
+        public double TimeSaloonBMW()
+        {
+            if (RBtime == 0 || RC40time == 0)
+            {
+                return ((PartTime(FCtime, FCcount)) * 2 + 2 * (PartTime(FBtime, FBcount))) / 0.65;
+            }
+            else if (FCtime == 0 || FBcount == 0)
+            {
+                return (2 * (PartTime(RBtime, RBcount)) + PartTime(RC40time, RC40count)) / 0.35;
+            }
+            else
+            {
+                Double percent = (double)(RC40time / (RC40time + RC100time));
+                return (PartTime(FCtime, FCcount)) * 2 + 2 * (PartTime(FBtime, FBcount)) + 2 * (PartTime(RBtime, RBcount)) + (1 - percent) * (RC100time / RC100count) + percent * (2 * RC40time / RC40count);
+            }
+        }
+
+
         public double TimeSaloon()
         {
             RBtime += RB40time + RB60time;
