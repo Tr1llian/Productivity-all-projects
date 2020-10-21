@@ -29,14 +29,13 @@ namespace DataGridView_Import_Excel
                 + "\n" + " RC time for pcs= " + Math.Round(car.PartTime(car.RCtime + car.RC40time + car.RC60time, car.RCcount + car.RC40count + car.RC60count), 3) + "\n";
             row1["Час на салон"] = Math.Round(car.TimeSaloon(), 3);
             row1["Кількість салонів"] = Math.Floor(car.GeneralCount() / car.Coef);
-            row1["Середній час на одну штуку"] = Math.Round(car.AvgTime(), 3);
+            row1["Середній час на одну штуку"] = Math.Round(car.AvgTimeQ3(), 3);
+            car.AVGtime = car.AvgTimeQ3();
         }
 
         //Format row for G11
         public static void G11row(Saloon car , ref DataRow row1)
         {
-            double RCmiddle = 0;
-            RCmiddle = (car.PartTime(car.RC40time, car.RC40count) + car.PartTime(car.RC100time, car.RC100count)) / 2;
             car.RCtime = car.RC40time + car.RC100time;
             car.RCcount = car.RC100count + car.RC40count;
             row1["Проект"] = car.ProjectName;
@@ -54,14 +53,13 @@ namespace DataGridView_Import_Excel
                 + "\n" + " RC time for pcs= " + Math.Round(car.PartTime(car.RCtime, car.RCcount), 3) + "\n";
             row1["Час на салон"] = Math.Round(car.TimeSaloonBMW(), 3);
             row1["Кількість салонів"] = Math.Floor(car.GeneralCount() / car.Coef);
-            row1["Середній час на одну штуку"] = Math.Round(car.AvgTime(), 3);
+            row1["Середній час на одну штуку"] = Math.Round(car.AvgTimeG11(), 3);
+            car.AVGtime = car.AvgTimeG11();
         }
 
         //Format row for G3
         public static void G3row(Saloon car, ref DataRow row1)
         {
-            double RCmiddle = 0;
-            RCmiddle = (car.PartTime(car.RC40time, car.RC40count) + car.PartTime(car.RC100time, car.RC100count)) / 2;
             car.RCtime = car.RC40time + car.RC100time;
             car.RCcount = car.RC100count + car.RC40count;
             row1["Проект"] = car.ProjectName;
@@ -79,7 +77,8 @@ namespace DataGridView_Import_Excel
                 + "\n" + " RC time for pcs= " + Math.Round(car.PartTime(car.RCtime, car.RCcount), 3) + "\n";
             row1["Час на салон"] = Math.Round(car.TimeSaloonBMW(), 3);
             row1["Кількість салонів"] = Math.Floor(car.GeneralCount() / car.Coef);
-            row1["Середній час на одну штуку"] = Math.Round(car.AvgTime(), 3);
+            row1["Середній час на одну штуку"] = Math.Round(car.AvgTimeG11(), 3);
+            car.AVGtime = car.AvgTimeG11();
         }
 
         //Format row for BR223 
@@ -104,6 +103,7 @@ namespace DataGridView_Import_Excel
             row1["Час на салон"] = Math.Round(car.TimeSaloonBR223(), 3);
             row1["Кількість салонів"] = Math.Floor(car.GeneralCountBR223() / car.Coef);
             row1["Середній час на одну штуку"] = Math.Round(car.AvgTimeBR223(), 3);
+            car.AVGtime = car.AvgTimeBR223();
         }
 
         //Format row for SK38
@@ -127,8 +127,42 @@ namespace DataGridView_Import_Excel
                 + "\n" + " RC time for pcs= " + Math.Round(car.PartTime(car.RCtime, car.RCcount), 3) + "\n";
             row1["Час на салон"] = Math.Round(car.TimeSaloonSK38(), 3);
             row1["Кількість салонів"] = Math.Floor(car.GeneralCount() / car.Coef);
-            row1["Середній час на одну штуку"] = Math.Round(car.AvgTime(), 3);
+            row1["Середній час на одну штуку"] = Math.Round(car.AvgTimeSK38(), 3);
+            car.AVGtime = car.AvgTimeSK38();
 
+        }
+
+
+        //Format row for BMWhiga
+        public static void BMWvoga(Saloon car, ref DataRow row1)
+        {
+            row1["Проект"] = "BMW Voga";
+            row1["Кількість чохлів"] = "\n FB = " + car.FBcount
+                + "\n" + " FC= " + car.FCcount + "\n";
+            row1["Загальний час"] = "\n FB time = " + car.FBtime
+                + "\n" + " FC time= " + car.FCtime + "\n";
+            row1["Час на одну штуку"] = "\n FB time for pcs= " + Math.Round(car.PartTime(car.FCtime,car.FBcount) , 3)
+                +"\n" + " FC time for pcs= " + Math.Round(car.PartTime(car.FCtime,car.FCcount), 3) + "\n";
+            row1["Час на салон"] = Math.Round(((car.PartTime(car.FBtime, car.FBcount) * 2) + 2 * car.PartTime(car.FCtime, car.FCcount)) / 0.65);
+            row1["Кількість салонів"] = Math.Floor((car.FBcount + car.FCcount) / car.Coef);
+            row1["Середній час на одну штуку"] = Math.Round(((double)(car.FCtime+car.FBtime) / (double)(car.FCcount+car.FBcount)), 3);
+            car.AVGtime = Math.Round(((double)(car.FCtime + car.FBtime) / (double)(car.FCcount + car.FBcount)), 3);
+        }
+
+        //Format row for BMWvofa
+        public static void BMWhiga(Saloon car, ref DataRow row1)
+        {
+            row1["Проект"] = "BMW higa";
+            row1["Кількість чохлів"] = "\n RB = " + car.RBcount
+                + "\n" + " RC= " + car.RCcount + "\n";
+            row1["Загальний час"] = "\n RB time = " + car.RBtime
+                + "\n" + " RC time= " + car.RCtime + "\n";
+            row1["Час на одну штуку"] = "\n RB time for pcs= " + Math.Round(car.PartTime(car.RBtime, car.RBcount), 3)
+                + "\n" + " RC time for pcs= " + Math.Round(car.PartTime(car.RCtime, car.RCcount), 3) + "\n";
+            row1["Час на салон"] = Math.Round(((car.PartTime(car.RBtime, car.RBcount) * 2) + car.PartTime(car.RCtime, car.RCcount)) / 0.35);
+            row1["Кількість салонів"] = Math.Floor((car.RBcount + car.RCcount) / car.Coef);
+            row1["Середній час на одну штуку"] = Math.Round(((double)(car.RCtime + car.RBtime) / (double)(car.RCcount + car.RBcount)), 3);
+            car.AVGtime = Math.Round(((double)(car.RCtime + car.RBtime) / (double)(car.RCcount + car.RBcount)), 3);
         }
     }
 }

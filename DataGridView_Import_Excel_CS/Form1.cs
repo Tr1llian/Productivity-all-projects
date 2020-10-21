@@ -113,6 +113,8 @@ namespace DataGridView_Import_Excel
                             Saloon Q3_326 = new Saloon("Audi Q3");
                             Saloon G11 = new Saloon("G11");
                             Saloon G3 = new Saloon("G3");
+                            Saloon BMWvoga = new Saloon("BMWvoga");
+                            Saloon BMWhiga = new Saloon("BMWhiga");
                             Saloon BR223 = new Saloon("BR223");
                             Saloon Skoda = new Saloon("SK38");
 
@@ -140,7 +142,6 @@ namespace DataGridView_Import_Excel
                                 {
                                     Calculation.SK38calc(row,ref Skoda);
                                 }
-
                             }
                       
                             DataTable result = new DataTable();
@@ -150,8 +151,11 @@ namespace DataGridView_Import_Excel
                             result.Columns.Add("Загальний час").DataType=typeof(string);
                             result.Columns.Add("Час на одну штуку");
                             result.Columns.Add("Час на салон");
-                            result.Columns.Add("Кількість салонів");
+                            result.Columns.Add("Кількість салонів").DataType = typeof(int);
                             result.Columns.Add("Середній час на одну штуку");
+                            result.Columns.Add("Коефіцієнт/кількість компонентів");
+                            result.Columns.Add("Кількість компонент помножено на середній на одну штуку");
+                            result.Columns.Add("Prod. sets planned").DataType = typeof(double);
                             //result.Columns.Add("Кількість комлектних салонів");
                             List<Saloon> Cars = new List<Saloon>();
                             
@@ -164,11 +168,21 @@ namespace DataGridView_Import_Excel
                             Cars.Add(G11);
                             Cars.Add(G3);
 
+                            BMWvoga.Coef = 4.0;
+                            BMWhiga.Coef = 3.5;
+                            Calculation.BMWvogacalc(G11, G3,ref BMWvoga);
+                            Calculation.BMWhigacalc(G11 ,ref BMWhiga);
+                            
+                            Cars.Add(BMWvoga);
+                            Cars.Add(BMWhiga);
+
                             BR223.Coef = 8.0;
                             Cars.Add(BR223);
 
                             Skoda.Coef = 3.0;
                             Cars.Add(Skoda);
+
+
 
                             foreach (Saloon car in Cars)
                             {
@@ -193,36 +207,22 @@ namespace DataGridView_Import_Excel
                                 {
                                     FormatRow.SK38row(car, ref row1);
                                 }
+                                else if(car.ProjectName == "BMWhiga")
+                                {
+                                    FormatRow.BMWhiga(car, ref row1);
+                                }
+                                else if( car.ProjectName == "BMWvoga")
+                                {
+                                    FormatRow.BMWvoga(car, ref row1);
+                                }
+                                row1["Коефіцієнт/кількість компонентів"] =  car.Coef;
+                                row1["Кількість компонент помножено на середній на одну штуку"] = Math.Round(car.Coef * car.AVGtime, 3);
+                                row1["Prod. sets planned"] = Math.Round( 480/ (car.Coef * car.AVGtime),3);
                                 //row1["Кількість комлектних салонів"] = car.CompleteSaloons();
                                 result.Rows.Add(row1);
                             }
 
-                            DataRow row2 = result.NewRow();
-                            row2["Проект"] = "BMW Voga";
-                            row2["Кількість чохлів"] = "\n FB = " + (G11.FBcount + G3.FBcount)
-                                + "\n" + " FC= " + (G11.FCcount + G3.FCcount) + "\n";
-                            row2["Загальний час"] = "\n FB time = " + (G11.FBtime + G3.FBtime)
-                                + "\n" + " FC time= " + (G11.FCtime + G11.FCtime) + "\n";
-                            row2["Час на одну штуку"] = "\n FB time for pcs= " + Math.Round(G11.PartTime(G11.FBtime + G3.FBtime, G11.FBcount + G3.FBcount), 3)
-                                + "\n" + " FC time for pcs= " + Math.Round(G11.PartTime(G11.FCtime + G11.FCtime, G11.FCcount + G3.FCcount), 3) + "\n";
-                            row2["Час на салон"] = Math.Round((G11.PartTime(G11.FBtime + G3.FBtime, G11.FBcount + G3.FBcount) * 2 + 2 * G11.PartTime(G11.FCtime + G11.FCtime, G11.FBcount + G3.FBcount)) / 0.65);
-                            row2["Кількість салонів"] = Math.Floor((G11.FBcount + G3.FBcount + G11.FCcount + G3.FCcount) / 4.0);
-                            row2["Середній час на одну штуку"] = Math.Round(((double)(G11.FBtime + G3.FBtime + G11.FCtime + G3.FCtime) / (double)(G11.FCcount + G3.FCcount + G11.FBcount + G3.FBcount)), 3);
-                            result.Rows.Add(row2);
-
-                            DataRow row3 = result.NewRow();
-                            row3["Проект"] = "BMW Higa";
-                            row3["Кількість чохлів"] = "\n RB = " + G11.RBcount
-                                + "\n" + " RC= " + (G11.RC40count + G11.RC100count) + "\n";
-                            row3["Загальний час"] = "\n RB = " + G11.RBtime
-                                + "\n" + " RC time= " + G11.RCtime + "\n";
-                            row3["Час на одну штуку"] = "\n RB time for pcs= " + Math.Round(G11.PartTime(G11.RBtime, G11.RBcount), 3)
-                                + "\n" + " RC time for pcs= " + Math.Round(G11.PartTime(G11.RC100time + G11.RC40time, G11.RC100count + G11.RC40count), 3) + "\n";
-                            row3["Час на салон"] = Math.Round((G11.RC40time / G11.RC40count + 2 * G11.RBtime / G11.RBcount) / 0.35); ;
-                            row3["Кількість салонів"] = Math.Floor((G11.RBcount + G11.RCcount) / 3.5);
-                            row3["Середній час на одну штуку"] = Math.Round(((double)(G11.RBtime + G11.RCtime) / (double)(G11.RC40count + G11.RC100count + G11.RBcount)), 3);
-                            result.Rows.Add(row3);
-
+                           
                             dataGridView1.DataSource = result;
                             Cursor = Cursors.Arrow;
                         }

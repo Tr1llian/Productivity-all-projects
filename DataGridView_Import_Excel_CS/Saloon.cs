@@ -9,7 +9,8 @@ namespace DataGridView_Import_Excel
         public int FCtime;
         public int FCcount;
 
-
+        public double AVGtime = 0;
+        
         public int VSTcount;
         public int VSTtime;
 
@@ -54,7 +55,7 @@ namespace DataGridView_Import_Excel
             FCcount = FCtime = FBcount = FBtime = RCcount = RCtime = RBtime = RBcount=RC40count=RC40time=RC60count=RC60time=0;
         }
 
-        public double AvgTime() 
+        public double AvgTimeQ3() 
         {
             double AllPcs= FCcount + FBcount + RCcount + RBcount + RB20count;
             double AllTime = FCtime + FBtime + RB20time + RBtime + RCtime;
@@ -67,6 +68,37 @@ namespace DataGridView_Import_Excel
                 return AllTime / AllPcs;
             }
         }
+
+        public double AvgTimeG11()
+        {
+            double AllPcs = FCcount + FBcount + RCcount + RBcount;
+            double AllTime = FCtime + FBtime  + RBtime + RCtime;
+            if (AllPcs == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return AllTime / AllPcs;
+            }
+        }
+
+        public double AvgTimeSK38()
+        {
+            double AllPcs = FCcount + FBcount + RCcount + RB40count + RB60count;
+            double AllTime = FCtime + FBtime + RCtime + RB40time + RB60time;
+            if (AllPcs == 0)
+            {
+                return 0.0;
+            }
+            else
+            {
+                return AllTime / AllPcs;
+            }
+        }
+
+
+
 
         public double GeneralCount()
         {
@@ -209,8 +241,8 @@ namespace DataGridView_Import_Excel
 
         public double AvgTimeBR223()
         {
-            double AllCount = FCcount + FBcount + VSTcount + RB40count + RB60count + RC40count + RC60count + RCcount + RBcount;
-            double AllTime = FCtime + FBtime + RBtime + RCtime + VSTtime;
+            double AllCount = FCcount + FBcount  + RB40count + RB60count + RC40count + RC60count + RCcount + RBcount;
+            double AllTime = FCtime + FBtime + RBtime + RCtime;
             if (AllCount == 0)
             {
                 return 0;
@@ -223,7 +255,7 @@ namespace DataGridView_Import_Excel
 
         public int GeneralCountBR223()
         {
-            return FCcount + FBcount + VSTcount + RB40count + RB60count + RC40count + RC60count + RCcount + RBcount;
+            return FCcount + FBcount + RB40count + RB60count + RC40count + RC60count + RCcount + RBcount;
         }
 
         public double TimeSaloonBR223()
