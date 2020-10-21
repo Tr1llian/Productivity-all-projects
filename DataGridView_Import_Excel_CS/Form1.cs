@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using Excel = Microsoft.Office.Interop.Excel;
 using DGVPrinterHelper;
-
+using GroupwareTypeLibrary;
+using Application = GroupwareTypeLibrary.Application;
+using Message = GroupwareTypeLibrary.Message;
 
 namespace DataGridView_Import_Excel
 {
@@ -279,8 +281,10 @@ System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.
 
                 Int16 i, j;
 
-                xlApp = new Excel.ApplicationClass();
-                xlApp.DisplayAlerts = false;
+                xlApp = new Excel.ApplicationClass
+                {
+                    DisplayAlerts = false
+                };
 
                 xlWorkBook = xlApp.Workbooks.Add(misValue);
 
@@ -371,15 +375,17 @@ System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.
 
             printer.PageNumberInHeader = false;
 
-
             printer.HeaderCellAlignment = StringAlignment.Center;
-            printer.ColumnWidths.Add("Проект",90);
+            printer.ColumnWidths.Add("Проект",70);
             printer.ColumnWidths.Add("Кількість чохлів", 90);
-            printer.ColumnWidths.Add("Загальний час", 90);
+            printer.ColumnWidths.Add("Загальний час", 100);
             printer.ColumnWidths.Add("Час на одну штуку", 110);
-            printer.ColumnWidths.Add("Час на салон", 90);
-            printer.ColumnWidths.Add("Кількість салонів", 90);
-            printer.ColumnWidths.Add("Середній час на одну штуку", 90);
+            printer.ColumnWidths.Add("Час на салон", 60);
+            printer.ColumnWidths.Add("Кількість салонів", 60);
+            printer.ColumnWidths.Add("Середній час на одну штуку", 40);
+            printer.ColumnWidths.Add("Коефіцієнт/кількість компонентів", 40);
+            printer.ColumnWidths.Add("Кількість компонент помножено на середній на одну штуку", 70);
+            printer.ColumnWidths.Add("Prod. sets planned", 40);
             printer.Footer = "BADER";
 
             printer.FooterSpacing = 15;
@@ -391,6 +397,33 @@ System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.
         private void Label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                Application gwapplication = new Application();
+                Account objAccount = gwapplication.Login("login", null, "test", GroupwareTypeLibrary.LoginConstants.egwNeverPrompt, null);
+                Messages messages1 = objAccount.MailBox.Messages;
+                Messages messages = messages1;
+                Message message = messages.Add("GW.MESSAGE.MAIL", "Draft", null);
+                Recipients recipients = message.Recipients;
+                Recipient recipient = recipients.Add("1993serior1@gmail.com", null, null);
+                message.Attachments.Add(@"C:\Users\admin\Desktop\fdsfsdfds.pdf");
+                message.Subject.PlainText = "Звіт продуктивності";
+                message.BodyText.PlainText = "Testing Message Body";
+
+                Message myMessage = message.Send();
+
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }
