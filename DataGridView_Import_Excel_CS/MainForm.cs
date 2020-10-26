@@ -47,11 +47,6 @@ namespace DataGridView_Import_Excel
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 Cursor = Cursors.WaitCursor;
-                dataGridView1.Visible = true;
-                btnPrint.Visible = true;
-                button1.Visible = true;
-                button2.Visible = true;
-               
             }
             Cursor = Cursors.Arrow;
         }
@@ -79,12 +74,23 @@ namespace DataGridView_Import_Excel
             }
 
             //Get the name of the First Sheet.
+
             using (OleDbConnection con = new OleDbConnection(conStr))
             {
                 using (OleDbCommand cmd = new OleDbCommand())
                 {
                     cmd.Connection = con;
-                    con.Open();
+                    try
+                    {
+                        con.Open();
+                    }
+                    catch(Exception ex)
+                    {
+
+                        Console.WriteLine(ex.ToString());
+                        MessageBox.Show("Невірний формат ексель файлу \n"+ex.ToString(), "Невірний формат файлу", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     DataTable dtExcelSchema = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
                     //sheetName = "data";
                     sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
@@ -92,7 +98,12 @@ namespace DataGridView_Import_Excel
                     con.Close();
                 }
             }
-           
+            dataGridView1.Visible = true;
+            btnPrint.Visible = true;
+            button1.Visible = true;
+            button2.Visible = true;
+
+
 
             //Read Data from the First Sheet.
             using (OleDbConnection con = new OleDbConnection(conStr))
@@ -155,9 +166,9 @@ namespace DataGridView_Import_Excel
                             result.Columns.Add("Час на одну штуку");
                             result.Columns.Add("Час на салон");
                             result.Columns.Add("Кількість салонів").DataType = typeof(int);
-                            result.Columns.Add("Середній час на одну штуку");
-                            result.Columns.Add("Коефіцієнт/кількість компонентів");
-                            result.Columns.Add("Кількість компонент помножено на середній на одну штуку");
+                            result.Columns.Add("Середній час на одну штуку").DataType = typeof(double);
+                            result.Columns.Add("Коефіцієнт/кількість компонентів").DataType = typeof(double);
+                            result.Columns.Add("Кількість компонент помножено на середній на одну штуку").DataType=typeof(double);
                             result.Columns.Add("Prod. sets planned").DataType = typeof(double);
                             //result.Columns.Add("Кількість комлектних салонів");
                             List<Saloon> Cars = new List<Saloon>();

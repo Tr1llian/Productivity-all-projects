@@ -63,6 +63,16 @@ namespace Productivity.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _108993216_ok_hand {
+            get {
+                object obj = ResourceManager.GetObject("_108993216_ok-hand", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Bader_feel {
             get {
                 object obj = ResourceManager.GetObject("Bader-feel", resourceCulture);

@@ -84,8 +84,19 @@
       <DependentUpon>GW.cs</DependentUpon>
     </Compile>
     <Compile Include="FormatRow.cs" />
+    <Compile Include="MyMessages.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MyMessages.Designer.cs">
+      <DependentUpon>MyMessages.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Saloon.cs" />
     <EmbeddedResource Include="LoginGW.resx">
       <DependentUpon>LoginGW.cs</DependentUpon>
@@ -96,16 +107,14 @@
     <EmbeddedResource Include="GW.resx">
       <DependentUpon>GW.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MyMessages.resx">
+      <DependentUpon>MyMessages.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -123,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BADER %281%29.ico" />
+    <None Include="Resources\_108993216_ok-hand.jpg" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="GroupwareTypeLibrary">

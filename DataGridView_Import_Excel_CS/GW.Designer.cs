@@ -48,9 +48,9 @@
             // 
             // AddMail
             // 
-            this.AddMail.Location = new System.Drawing.Point(94, 369);
+            this.AddMail.Location = new System.Drawing.Point(94, 379);
             this.AddMail.Name = "AddMail";
-            this.AddMail.Size = new System.Drawing.Size(500, 23);
+            this.AddMail.Size = new System.Drawing.Size(498, 46);
             this.AddMail.TabIndex = 4;
             this.AddMail.Text = "Додати";
             this.AddMail.UseVisualStyleBackColor = true;
@@ -58,9 +58,9 @@
             // 
             // DeleteMail
             // 
-            this.DeleteMail.Location = new System.Drawing.Point(94, 398);
+            this.DeleteMail.Location = new System.Drawing.Point(94, 431);
             this.DeleteMail.Name = "DeleteMail";
-            this.DeleteMail.Size = new System.Drawing.Size(500, 23);
+            this.DeleteMail.Size = new System.Drawing.Size(500, 46);
             this.DeleteMail.TabIndex = 5;
             this.DeleteMail.Text = "Видалити";
             this.DeleteMail.UseVisualStyleBackColor = true;
@@ -68,7 +68,7 @@
             // 
             // MailTextBox
             // 
-            this.MailTextBox.Location = new System.Drawing.Point(180, 341);
+            this.MailTextBox.Location = new System.Drawing.Point(178, 345);
             this.MailTextBox.Name = "MailTextBox";
             this.MailTextBox.Size = new System.Drawing.Size(414, 22);
             this.MailTextBox.TabIndex = 3;
@@ -86,9 +86,9 @@
             // 
             // SentMail
             // 
-            this.SentMail.Location = new System.Drawing.Point(94, 427);
+            this.SentMail.Location = new System.Drawing.Point(92, 483);
             this.SentMail.Name = "SentMail";
-            this.SentMail.Size = new System.Drawing.Size(500, 23);
+            this.SentMail.Size = new System.Drawing.Size(500, 46);
             this.SentMail.TabIndex = 2;
             this.SentMail.Text = "Надіслати";
             this.SentMail.UseVisualStyleBackColor = true;
@@ -99,7 +99,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Productivity.Properties.Resources.Bader_feel;
-            this.ClientSize = new System.Drawing.Size(662, 471);
+            this.ClientSize = new System.Drawing.Size(660, 589);
             this.Controls.Add(this.SentMail);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.MailTextBox);
@@ -109,6 +109,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Надіслати звіт";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);

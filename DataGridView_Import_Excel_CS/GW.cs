@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using GroupwareTypeLibrary;
+using Productivity;
 using Application = GroupwareTypeLibrary.Application;
 using Message = GroupwareTypeLibrary.Message;
 
@@ -139,7 +140,13 @@ namespace DataGridView_Import_Excel
                 message.BodyText.PlainText = "Звіт продуктивності у додатку";
 
                 Message myMessage = message.Send();
+                File.Delete(pathfileXls);
+                MyMessages m = new MyMessages();
+                m.ShowDialog();
 
+                bool okButtonClicked = m.OKButtonClicked;
+                //MessageBox.Show("Звіт успішно відправлений...", "Звіт успішно відправлено", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Close();
 
             }
 
