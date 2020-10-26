@@ -6,11 +6,10 @@ using System.Data;
 using System.Data.OleDb;
 using System.Collections.Generic;
 using System.Drawing;
-using Excel = Microsoft.Office.Interop.Excel;
 using DGVPrinterHelper;
-using GroupwareTypeLibrary;
-using Application = GroupwareTypeLibrary.Application;
-using Message = GroupwareTypeLibrary.Message;
+using ClosedXML.Excel;
+using System.Text;
+using Productivity;
 
 namespace DataGridView_Import_Excel
 {
@@ -30,6 +29,7 @@ namespace DataGridView_Import_Excel
             dataGridView1.Visible = false;
             btnPrint.Visible = false;
             button1.Visible = false;
+            button2.Visible = false;
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
@@ -50,6 +50,7 @@ namespace DataGridView_Import_Excel
                 dataGridView1.Visible = true;
                 btnPrint.Visible = true;
                 button1.Visible = true;
+                button2.Visible = true;
                
             }
             Cursor = Cursors.Arrow;
@@ -258,74 +259,78 @@ namespace DataGridView_Import_Excel
             //    }
             //}
         }
-        private
-            void Button1_Click(object sender, EventArgs e)
 
+        public  void CreateExcel(bool a)
         {
-            SaveFileDialog openDlg = new SaveFileDialog();
-            openDlg.Filter = "Execl files (*.xls)|*.xls";
+            var workbook = new XLWorkbook();
+            workbook.AddWorksheet("sheetName");
+            var ws = workbook.Worksheet("sheetName");
 
-            string path = openDlg.FileName;
-            if (openDlg.ShowDialog() == DialogResult.OK)
+            int row = 1;
+            ws.Cell("A" + row.ToString()).Value = "Проект";
+            ws.Cell("B" + row.ToString()).Value = "Кількість чохлів";
+            ws.Cell("C" + row.ToString()).Value = "Загальний час";
+            ws.Cell("D" + row.ToString()).Value = "Час на одну штуку";
+            ws.Cell("E" + row.ToString()).Value = "Час на салон";
+            ws.Cell("F" + row.ToString()).Value = "Кількість салонів";
+            ws.Cell("G" + row.ToString()).Value = "Середній час на одну штуку";
+            ws.Cell("H" + row.ToString()).Value = "Коефіцієнт/кількість компонентів";
+            StringBuilder str = new StringBuilder();
+            str.Append("Кількість компонент помножено");
+            str.AppendLine();
+            str.Append("на середній на одну штуку");
+            ws.Cell("I" + row.ToString()).Value = str.ToString();
+            ws.Cell("J" + row.ToString()).Value = "Prod. sets planned";
+            var rngTable = ws.Range("A1:J1");
+            rngTable.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            rngTable.Style.Font.Bold = true;
+            rngTable.Style.Font.FontColor = XLColor.DarkBlue;
+            rngTable.Style.Fill.BackgroundColor = XLColor.Aqua;
+
+            row = 2;
+            foreach (DataGridViewRow item in dataGridView1.Rows)
             {
-
-                Excel.Application xlApp;
-
-                Excel.Workbook xlWorkBook;
-
-                Excel.Worksheet xlWorkSheet;
-
-                object misValue = System.Reflection.Missing.Value;
-            System.Globalization.CultureInfo oldCI = System.Threading.Thread.CurrentThread.CurrentCulture;
-System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-
-                Int16 i, j;
-
-                xlApp = new Excel.ApplicationClass
-                {
-                    DisplayAlerts = false
-                };
-
-                xlWorkBook = xlApp.Workbooks.Add(misValue);
-
-                xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-
-                //xlWorkSheet.Cells[1, 1] = "Проект";
-                //xlWorkSheet.Cells[1, 2] = "Кількість чохлів";
-                //xlWorkSheet.Cells[1, 3] = "Загальний час";
-                //xlWorkSheet.Cells[1, 4] = "Час на одну штуку";
-                //xlWorkSheet.Cells[1, 5] = "Час на cалон";
-
-                for (i = 0; i <= dataGridView1.RowCount - 1; i++)
-
-                {
-
-                    for (j = 0; j <= dataGridView1.ColumnCount - 1; j++)
-
-                    {
-
-                        xlWorkSheet.Cells[i + 1, j + 1] = dataGridView1[j, i].Value.ToString();
-                    }
-                }
-
-                try
-                {
-                    xlWorkBook.SaveAs(path.ToString(), Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Сталася помилка під час збереження " + ex.ToString());
-                }
-                xlWorkBook.Close(true, misValue, misValue);
-
-                xlApp.Quit();
-
-                ReleaseObject(xlWorkSheet);
-
-                ReleaseObject(xlWorkBook);
-
-                ReleaseObject(xlApp);
+                ws.Cell("A" + row.ToString()).Value = item.Cells[0].Value.ToString();
+                ws.Cell("B" + row.ToString()).Value = item.Cells[1].Value.ToString();
+                ws.Cell("C" + row.ToString()).Value = item.Cells[2].Value.ToString();
+                ws.Cell("D" + row.ToString()).Value = item.Cells[3].Value.ToString();
+                ws.Cell("E" + row.ToString()).Value = item.Cells[4].Value.ToString();
+                ws.Cell("F" + row.ToString()).Value = item.Cells[5].Value.ToString();
+                ws.Cell("G" + row.ToString()).Value = item.Cells[6].Value.ToString();
+                ws.Cell("H" + row.ToString()).Value = item.Cells[7].Value.ToString().Replace(',', '.');
+                ws.Cell("I" + row.ToString()).Value = item.Cells[8].Value.ToString();
+                ws.Cell("J" + row.ToString()).Value = item.Cells[9].Value.ToString();
+                row++;
             }
+            ws.RangeUsed().Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
+            ws.Columns().AdjustToContents();
+            ws.Columns().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            IXLRange titleRange = ws.Range("A1:J20");
+
+            titleRange.Cells().Style
+                .Alignment.SetWrapText(true); // Its single statement
+            titleRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            titleRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            if (a == false)
+            {
+                workbook.SaveAs(@"C:/test/productivity.xlsx");
+            }
+            else
+            {
+                saveFileDialog1.Filter = "*.xlsx|";
+                _ = saveFileDialog1.FileName;
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    workbook.SaveAs(saveFileDialog1.FileName + ".xlsx");
+                }
+            }
+        }
+
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            CreateExcel(true);
+           
         }
 
         private
@@ -399,31 +404,12 @@ System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
-            try
-            {
-
-                Application gwapplication = new Application();
-                Account objAccount = gwapplication.Login("login", null, "test", GroupwareTypeLibrary.LoginConstants.egwNeverPrompt, null);
-                Messages messages1 = objAccount.MailBox.Messages;
-                Messages messages = messages1;
-                Message message = messages.Add("GW.MESSAGE.MAIL", "Draft", null);
-                Recipients recipients = message.Recipients;
-                Recipient recipient = recipients.Add("1993serior1@gmail.com", null, null);
-                message.Attachments.Add(@"C:\Users\admin\Desktop\fdsfsdfds.pdf");
-                message.Subject.PlainText = "Звіт продуктивності";
-                message.BodyText.PlainText = "Testing Message Body";
-
-                Message myMessage = message.Send();
-
-
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
+            CreateExcel(false);
+            var LoginGW = new LoginGW();
+            _ = LoginGW.ShowDialog();
+            
         }
     }
 }

@@ -97,8 +97,25 @@ namespace DataGridView_Import_Excel
             }
         }
 
+        public double GeneralCountSk38()
+        {
+            return FCcount + FBcount + RCcount + RB40count + RB60count; 
+        }
 
+        public double GeneralTimeSk38()
+        {
+            return FCtime + FBtime + RCtime + RB40time + RB60time; 
+        }
 
+        public double GeneralCountQ3()
+        {
+            return FCcount + FBcount + RCcount + RBcount + RB20count;
+        }
+
+        public double GeneralTimeQ3()
+        {
+            return FCtime + FBtime + RB20time + RBtime + RCtime;
+        }
 
         public double GeneralCount()
         {
@@ -241,7 +258,7 @@ namespace DataGridView_Import_Excel
 
         public double AvgTimeBR223()
         {
-            double AllCount = FCcount + FBcount  + RB40count + RB60count + RC40count + RC60count + RCcount + RBcount;
+            double AllCount = FCcount + FBcount  + RB40count + RB60count + RC40count + RC60count + RCcount/2 + RBcount;
             double AllTime = FCtime + FBtime + RBtime + RCtime;
             if (AllCount == 0)
             {
@@ -253,9 +270,10 @@ namespace DataGridView_Import_Excel
             }
         }
 
+
         public int GeneralCountBR223()
         {
-            return FCcount + FBcount + RB40count + RB60count + RC40count + RC60count + RCcount + RBcount;
+            return FCcount + FBcount + RB40count + RB60count + RC40count + RC60count + RCcount/2 + RBcount;
         }
 
         public double TimeSaloonBR223()
@@ -387,7 +405,6 @@ namespace DataGridView_Import_Excel
                 return (PartTime(FCtime, FCcount)) * 2 + 2 * (PartTime(FBtime, FBcount)) + 2 * (PartTime(RBtime, RBcount)) + (1 - percent) * (RC100time / RC100count) + percent * (2 * RC40time / RC40count);
             }
         }
-
 
         public double TimeSaloon()
         {
@@ -533,6 +550,16 @@ namespace DataGridView_Import_Excel
 
 
 
+        }
+
+        public double GeneralTime()
+        {
+            return FCtime + FBtime + RCtime + RBtime;
+        }
+
+        public double GeneralTimeBR223()
+        {
+            return FCtime + FBtime + RBtime + RCtime/2;
         }
     }
 }
