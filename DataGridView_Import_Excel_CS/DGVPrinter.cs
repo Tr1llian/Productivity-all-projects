@@ -3200,7 +3200,7 @@ namespace DGVPrinterHelper //AllocationRequest
             if ((bool)PrintColumnHeaders)
             {
                 // print column headers
-                printcolumnheaders(g, ref printpos, pagesets[currentpageset]);
+                Printcolumnheaders(g, ref printpos, pagesets[currentpageset]);
             }
 
             //-----------------------------------------------------------------
@@ -3421,7 +3421,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <param name="g">Graphics Context to print within</param>
         /// <param name="pos">Track vertical space used; 'y' location</param>
         /// <param name="pageset">Current pageset - defines columns and margins</param>
-        private void printcolumnheaders(Graphics g, ref float pos, PageDef pageset)
+        private void Printcolumnheaders(Graphics g, ref float pos, PageDef pageset)
         {
             // track printing location accross the page. start position is hard left,
             // adjusted for the row headers. Note rowheaderwidth is 0 if row headers are not printed

@@ -16,10 +16,8 @@ namespace DataGridView_Import_Excel
     public
     partial class Form1 : Form
     {
-        private
-            string Excel03ConString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1}'";
-        private
-            string Excel07ConString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1}'";
+        private readonly string Excel03ConString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1}'";
+        private readonly string Excel07ConString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1}'";
 
         public
             Form1()
@@ -347,54 +345,23 @@ namespace DataGridView_Import_Excel
            
         }
 
-        private
-            void ReleaseObject(object obj)
-
+        private void BtnPrint_Click_1(object sender, EventArgs e)
         {
-
-            try
-
+            DGVPrinter printer = new DGVPrinter
             {
+                Title = "Продуктивність",
+                //printer.SubTitle = string.Format("Дата {0}", DateTime.Now);
 
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                SubTitleFormatFlags = StringFormatFlags.LineLimit |
 
-                obj = null;
-            }
+                StringFormatFlags.NoClip,
 
-            catch (Exception ex)
+                PageNumbers = true,
 
-            {
+                PageNumberInHeader = false,
 
-                obj = null;
-
-                MessageBox.Show("Exception Occured while releasing object " + ex.ToString());
-            }
-
-            finally
-
-            {
-
-                GC.Collect();
-            }
-        }
-
-        private
-            void BtnPrint_Click_1(object sender, EventArgs e)
-        {
-            DGVPrinter printer = new DGVPrinter();
-
-            printer.Title = "Продуктивність";
-            //printer.SubTitle = string.Format("Дата {0}", DateTime.Now);
-
-            printer.SubTitleFormatFlags = StringFormatFlags.LineLimit |
-
-                StringFormatFlags.NoClip;
-
-            printer.PageNumbers = true;
-
-            printer.PageNumberInHeader = false;
-
-            printer.HeaderCellAlignment = StringAlignment.Center;
+                HeaderCellAlignment = StringAlignment.Center
+            };
             printer.ColumnWidths.Add("Проект",70);
             printer.ColumnWidths.Add("Кількість чохлів", 90);
             printer.ColumnWidths.Add("Загальний час", 100);

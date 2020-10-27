@@ -12,13 +12,12 @@ namespace DataGridView_Import_Excel
 {
     public partial class Form2 : Form
     {
-        string path = "C:/test/";
-        string pathfile = @"C:/test/recipients.txt";
-        string pathfileXls = @"C:/test/productivity.xlsx";
-        string Login = "";
-        string Password = "";
-
-        List<string> mailboxes;
+        readonly string path = "C:/test/";
+        readonly string pathfile = @"C:/test/recipients.txt";
+        readonly string pathfileXls = @"C:/test/productivity.xlsx";
+        readonly string Login = "";
+        readonly string Password = "";
+        readonly List<string> mailboxes;
 
         public Form2(string login, string password)
         {
@@ -68,8 +67,7 @@ namespace DataGridView_Import_Excel
         }
         private int CheckTextFile(string path)
         {
-            int size = 0;
-
+            int size;
             if (!File.Exists(path))
             {
                 File.Create(path).Dispose();
