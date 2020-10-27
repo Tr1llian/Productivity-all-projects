@@ -30,7 +30,7 @@ namespace DataGridView_Import_Excel
                 + "\n" + " RB20 time for pcs= " + Math.Round(car.PartTime(car.RB20time, car.RB20count), 3)
                 + "\n" + " RC time for pcs= " + Math.Round(car.PartTime(car.RCtime + car.RC40time + car.RC60time, car.RCcount + car.RC40count + car.RC60count), 3) + "\n";
             row1["Час на салон"] = Math.Round(car.TimeSaloon(), 3);
-            row1["Кількість салонів"] = Math.Floor(car.GeneralCount() / car.Coef);
+            row1["Кількість салонів"] = Math.Floor(car.GeneralCountQ3() / car.Coef);
             row1["Середній час на одну штуку"] = Math.Round(car.AvgTimeQ3(), 3);
             car.AVGtime = car.AvgTimeQ3();
         }

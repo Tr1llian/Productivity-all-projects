@@ -88,7 +88,10 @@ namespace DataGridView_Import_Excel
                     {
 
                         Console.WriteLine(ex.ToString());
-                        MessageBox.Show("Невірний формат ексель файлу \n"+ex.ToString(), "Невірний формат файлу", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MyMessages m = new MyMessages("Невірний формат", "Упевніться, що ексель має розширення xlsx і має структуру як на фото нижче", 2);
+                        m.ShowDialog();
+
+                        bool okButtonClicked = m.OKButtonClicked;
                         return;
                     }
                     DataTable dtExcelSchema = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);

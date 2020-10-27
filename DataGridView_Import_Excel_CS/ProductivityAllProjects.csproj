@@ -132,7 +132,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BADER %281%29.ico" />
-    <None Include="Resources\_108993216_ok-hand.jpg" />
+    <Content Include="Resources\Excel.png" />
+    <None Include="Resources\OK.jpg" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="GroupwareTypeLibrary">

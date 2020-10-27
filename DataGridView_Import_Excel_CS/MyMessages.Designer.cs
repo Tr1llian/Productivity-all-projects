@@ -37,19 +37,20 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackgroundImage = global::Productivity.Properties.Resources._108993216_ok_hand;
+            this.pictureBox1.BackgroundImage = global::Productivity.Properties.Resources.OK;
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(75, 144);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 165);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(309, 290);
+            this.pictureBox1.Size = new System.Drawing.Size(709, 345);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(75, 440);
+            this.button1.Location = new System.Drawing.Point(12, 516);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(309, 57);
+            this.button1.Size = new System.Drawing.Size(709, 43);
             this.button1.TabIndex = 2;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
@@ -59,7 +60,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(23, 82);
+            this.label1.Location = new System.Drawing.Point(28, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(386, 32);
             this.label1.TabIndex = 3;
@@ -72,7 +73,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Productivity.Properties.Resources.Bader_feel;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.ClientSize = new System.Drawing.Size(446, 571);
+            this.ClientSize = new System.Drawing.Size(733, 573);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox1);
@@ -80,7 +81,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MyMessages";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "MyMessages";
+            this.Text = "Успішно";
             this.Load += new System.EventHandler(this.MyMessages_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

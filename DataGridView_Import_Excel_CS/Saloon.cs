@@ -57,8 +57,8 @@ namespace DataGridView_Import_Excel
 
         public double AvgTimeQ3() 
         {
-            double AllPcs= FCcount + FBcount + RCcount + RBcount + RB20count;
-            double AllTime = FCtime + FBtime + RB20time + RBtime + RCtime;
+            double AllPcs= FCcount + FBcount + RCcount + RB40count + RB60count + RB20count;
+            double AllTime = FCtime + FBtime + RB20time + RB40time + RB60time + RCtime;
             if (AllPcs == 0)
             {
                 return 0;
@@ -109,12 +109,12 @@ namespace DataGridView_Import_Excel
 
         public double GeneralCountQ3()
         {
-            return FCcount + FBcount + RCcount + RBcount + RB20count;
+            return FCcount + FBcount + RCcount  + RB60count + RB40count + RB20count;
         }
 
         public double GeneralTimeQ3()
         {
-            return FCtime + FBtime + RB20time + RBtime + RCtime;
+            return FCtime + FBtime + RB20time + RB40time+RB60time + RCtime;
         }
 
         public double GeneralCount()
@@ -408,8 +408,8 @@ namespace DataGridView_Import_Excel
 
         public double TimeSaloon()
         {
-            RBtime += RB40time + RB60time;
-            RBcount += RB60count + RB40count;
+            RBtime = RB40time + RB60time;
+            RBcount = RB60count + RB40count;
 
             if (RB20count != 0 && RB20time != 0)
             {

@@ -141,7 +141,7 @@ namespace DataGridView_Import_Excel
 
                 Message myMessage = message.Send();
                 File.Delete(pathfileXls);
-                MyMessages m = new MyMessages();
+                MyMessages m = new MyMessages("Успішно", "Звіт успішно надісланий", 1);
                 m.ShowDialog();
 
                 bool okButtonClicked = m.OKButtonClicked;
