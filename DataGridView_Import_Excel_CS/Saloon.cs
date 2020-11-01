@@ -41,6 +41,9 @@ namespace DataGridView_Import_Excel
         public int RB60time;
         public int RB60count;
 
+        public int RB100time;
+        public int RB100count;
+
         public int RB20time;
         public int RB20count;
 
@@ -258,8 +261,8 @@ namespace DataGridView_Import_Excel
 
         public double AvgTimeBR223()
         {
-            double AllCount = FCcount + FBcount  + RB40count + RB60count + RC40count + RC60count + RCcount/2 + RBcount;
-            double AllTime = FCtime + FBtime + RBtime + RCtime;
+            double AllCount = FCcount + FBcount  + RC40count + 2*RC100count + RB40count+RB100count*2;
+            double AllTime = FCtime + FBtime + RBtime + RCtime+VSTtime;
             if (AllCount == 0)
             {
                 return 0;
@@ -273,18 +276,25 @@ namespace DataGridView_Import_Excel
 
         public int GeneralCountBR223()
         {
-            return FCcount + FBcount + RB40count + RB60count + RC40count + RC60count + RCcount/2 + RBcount;
+            return FCcount + FBcount  + RC60count + RB40count+RB100count*2+RC40count+RC100count*2;
+        }
+
+        public int SaloonCountBR223()
+        {
+            return Convert.ToInt32( Math.Floor(GeneralCountBR223() / Coef)) ;
         }
 
         public double TimeSaloonBR223()
         {
             RBtime += RB40time + RB60time;
-            RBcount += RB60count + RB40count;
+            RBcount = RB60count + RB40count;
+            RCcount = RC40count + RC100count;
+            Console.WriteLine(PartTime(VSTcount, SaloonCountBR223()) * PartTime(VSTtime, VSTcount));
             if (VSTtime != 0 && VSTcount != 0)
             {
                 if (FCtime != 0 && FBtime != 0 && RBtime != 0 && RCtime != 0)
                 {
-                    return 2 * PartTime(FCtime, FCcount) + 2 * PartTime(FBtime, FBcount) + 2 * PartTime(RBtime, RBcount) + 2 * PartTime(RCtime, RCcount) + PartTime(VSTtime, VSTcount);
+                    return 2.0 * PartTime(FCtime, FCcount) + 2.0 * PartTime(FBtime, FBcount) + 2.0 * PartTime(RBtime, RB40count + RB100count * 2) + 2.0 * PartTime(RCtime, RC40count + RC100count * 2) + PartTime(VSTcount, SaloonCountBR223()) * PartTime(VSTtime, VSTcount);
                 }
                 else if (FCtime != 0 && FBtime != 0 && RBtime == 0 && RCtime == 0)
                 {
@@ -559,7 +569,7 @@ namespace DataGridView_Import_Excel
 
         public double GeneralTimeBR223()
         {
-            return FCtime + FBtime + RBtime + RCtime/2;
+            return FCtime + FBtime + RBtime + RCtime+VSTtime;
         }
     }
 }

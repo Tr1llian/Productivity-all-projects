@@ -93,21 +93,24 @@ namespace DataGridView_Import_Excel
             row1["Проект"] = car.ProjectName;
             row1["Кількість чохлів"] = "\n FB = " + car.FBcount
                 + "\n" + " FC = " + car.FCcount
-                 + "\n" + " VST = " + car.VSTcount
-                + "\n" + " RB = " + (car.RBcount + car.RB60count + car.RB40count)
-                + "\n" + " RC = " + car.RCcount +
-                "\n"+"Загальна кількість="+car.GeneralCountBR223()+ "\n";
+                + "\n" + " RB40 (FES) = " + car.RB40count
+                  + "\n" + " RB100 (FSS)= " + car.RB100count
+                + "\n" + " RC40 (FES)= " + car.RC40count 
+                + "\n" + " RC100 (FSS)= " + car.RC100count
+                 + "\n" + " Small projects = " + car.VSTcount
+                + "\n" + "Загальна кількість=" + car.GeneralCountBR223() + "\n";
             row1["Загальний час"] = "\n FB time = " + car.FBtime
                 + "\n" + " FC time = " + car.FCtime
-                + "\n" + " VST time = " + car.VSTtime
+              
                 + "\n" + " RB time = " + (car.RBtime + car.RB40time + car.RB60time)
                 + "\n" + " RC time = " + car.RCtime +
-                "\n" + "Загальний час=" + car.GeneralTimeBR223() + "\n";
+                "\n" + " Small projects time = " + car.VSTtime
+                + "\n" + "Загальний час=" + car.GeneralTimeBR223() + "\n";
             row1["Час на одну штуку"] = "\n FB time for pcs = " + Math.Round(car.PartTime(car.FBtime, car.FBcount), 3)
                 + "\n" + " FC time for pcs = " + Math.Round(car.PartTime(car.FCtime, car.FCcount), 3)
-                 + "\n" + " VST time for pcs = " + Math.Round(car.PartTime(car.VSTtime, car.VSTcount), 3)
-                + "\n" + " RB time for pcs = " + Math.Round(car.PartTime(car.RBtime, car.RBcount), 3)
-                + "\n" + " RC time for pcs = " + Math.Round(car.PartTime(car.RCtime, car.RCcount), 3) + "\n";
+                + "\n" + " RB time for pcs = " + Math.Round(car.PartTime(car.RBtime, car.RB100count*2 + car.RB40count), 3)
+                + "\n" + " RC time for pcs = " + Math.Round(car.PartTime(car.RCtime, car.RC40count + car.RC100count*2), 3) 
+                + "\n" + " Small projects time for pcs = " + Math.Round(car.PartTime(car.VSTtime, car.VSTcount), 3);
             row1["Час на салон"] = Math.Round(car.TimeSaloonBR223(), 3);
             row1["Кількість салонів"] = Math.Floor(car.GeneralCountBR223() / car.Coef);
             row1["Середній час на одну штуку"] = Math.Round(car.AvgTimeBR223(), 3);

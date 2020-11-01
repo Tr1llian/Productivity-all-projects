@@ -140,8 +140,13 @@ namespace DataGridView_Import_Excel
         //calculation of DAIMLER BR223
         public static void BR223calc(DataRow row, ref Saloon BR223)
         {
-            //Console.WriteLine(row[6].ToString());
-            if (row[6].ToString().ToUpper().Contains("FAKI"))
+            if (row[6].ToString().ToUpper().Contains("VST")|| row[6].ToString().ToUpper().Contains("MITTE") || row[6].ToString().ToUpper().Contains("M-TEIL")|| row[6].ToString().Contains("Motorschutzabdeckung")|| row[6].ToString().Contains("Sichtschutz"))
+            {
+                BR223.VSTtime+= Convert.ToInt16(row[7].ToString());
+                BR223.VSTcount++;
+            }
+                //Console.WriteLine(row[6].ToString());
+                if (row[6].ToString().ToUpper().Contains("FAKI"))
             {
                 if (Convert.ToInt32(row[3].ToString()) >= 5000000)
                 {
@@ -163,27 +168,41 @@ namespace DataGridView_Import_Excel
             {
                 if (Convert.ToInt32(row[3].ToString()) >= 5000000)
                 {
-                    BR223.RBcount += 1;
+                    if ((row[6].ToString().ToUpper().Contains("FSS")))
+                    {
+                        BR223.RB100count += 1;
+                    }
+                    else if ((row[6].ToString().ToUpper().Contains("FES")))
+                    {
+                        BR223.RB40count += 1;
+                    }
                 }
-                BR223.RBtime += Convert.ToInt16(row[7].ToString());
+                if (row[6].ToString().ToUpper().Contains("FES") || (row[6].ToString().ToUpper().Contains("FSS")))
+                {
+                    BR223.RBtime += Convert.ToInt16(row[7].ToString());
+                }
             }
 
             else if (row[6].ToString().ToUpper().Contains("FOKI"))
             {
                 if (Convert.ToInt32(row[3].ToString()) >= 5000000)
                 {
-                    BR223.RCcount += 1;
+                    if (row[6].ToString().ToUpper().Contains("FOKI") && (row[6].ToString().ToUpper().Contains("FSS")))
+                    {
+                        BR223.RC100count += 1;
+                    }
+                    if(row[6].ToString().ToUpper().Contains("FOKI") && (row[6].ToString().ToUpper().Contains("FES")))
+                    {
+                        BR223.RC40count += 1;
+                    }
+
                 }
-                BR223.RCtime += Convert.ToInt16(row[7].ToString());
-            }
-            else
-            {
-                if (Convert.ToInt32(row[3].ToString()) >= 5000000)
+                if (row[6].ToString().ToUpper().Contains("FES") || (row[6].ToString().ToUpper().Contains("FSS")))
                 {
-                    BR223.VSTcount += 1;
+                    BR223.RCtime += Convert.ToInt16(row[7].ToString());
                 }
-                BR223.VSTtime += Convert.ToInt16(row[7].ToString());
             }
+            
         }
 
         //calculation G11
