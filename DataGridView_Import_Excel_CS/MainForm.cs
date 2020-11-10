@@ -125,13 +125,13 @@ namespace DataGridView_Import_Excel
                             oda.Fill(dt);
                             con.Close();
 
-                            Saloon Q3_326 = new Saloon("Audi Q3");
-                            Saloon G11 = new Saloon("G11");
-                            Saloon G3 = new Saloon("G3");
-                            Saloon BMWvoga = new Saloon("BMWvoga");
-                            Saloon BMWhiga = new Saloon("BMWhiga");
-                            Saloon BR223 = new Saloon("BR223");
-                            Saloon Skoda = new Saloon("SK38");
+                            Saloon Q3 = new SaloonQ3("Audi Q3");
+                            Saloon G11 = new SaloonG11("G11");
+                            Saloon G3 = new SaloonG3("G3");
+                            
+
+                            Saloon BR223 = new SaloonBR223("BR223");
+                            Saloon Skoda = new SaloonSK38("SK38");
 
 
 
@@ -139,26 +139,28 @@ namespace DataGridView_Import_Excel
                             {
                                 if (row[6].ToString().Contains("Audi") && row[6].ToString().Contains("Q3"))
                                 {
-                                    Calculation.Q3calc(row,ref Q3_326);
+                                    Q3.ParseExcel(row);
                                 }
                                 else if(row[6].ToString().ToUpper().Contains("G1"))
                                 {
-                                    Calculation.G11calc(row, ref G11);
+                                    G11.ParseExcel(row);
                                 }
                                 else if(row[6].ToString().ToUpper().Contains("G3Y") || row[6].ToString().ToUpper().Contains("F90"))
                                 {
-                                    Calculation.G3calc(row, ref G3);
+                                    G3.ParseExcel(row);
                                 }
                                 else if(row[6].ToString().ToUpper().Contains("BR223"))
                                 {
-                                    Calculation.BR223calc(row, ref BR223);
+                                    BR223.ParseExcel(row);
                                 }
                                 else if(row[6].ToString().ToUpper().Contains("SK38"))
                                 {
-                                    Calculation.SK38calc(row,ref Skoda);
+                                    Skoda.ParseExcel(row);
                                 }
                             }
-                      
+                            Saloon BMWhiga = new SaloonBMWhiga(G11,"BMWhiga");
+                            Saloon BMWvoga = new SaloonBMWvoga(G11, G3, "BMWvoga");
+
                             DataTable result = new DataTable();
                             result.Clear();
                             result.Columns.Add("Проект");
@@ -173,20 +175,18 @@ namespace DataGridView_Import_Excel
                             result.Columns.Add("Prod. sets planned").DataType = typeof(double);
                             //result.Columns.Add("Кількість комлектних салонів");
                             List<Saloon> Cars = new List<Saloon>();
-                            
-                            Q3_326.RCcount = Q3_326.RC40count + Q3_326.RC60count;
-                            Q3_326.RCtime = Q3_326.RC40time + Q3_326.RC60time;
-                            Q3_326.Coef = 9.0;
-                            Cars.Add(Q3_326);
-                            G11.Coef = 7.5;
+
+                            Q3.Coef = 9.0;
+                            Cars.Add(Q3);
+
+                            G11.Coef = 8;
                             G3.Coef = 4.0;
                             Cars.Add(G11);
                             Cars.Add(G3);
 
                             BMWvoga.Coef = 4.0;
-                            BMWhiga.Coef = 3.5;
-                            Calculation.BMWvogacalc(G11, G3,ref BMWvoga);
-                            Calculation.BMWhigacalc(G11 ,ref BMWhiga);
+                            BMWhiga.Coef = 4.0;
+                            
                             
                             Cars.Add(BMWvoga);
                             Cars.Add(BMWhiga);
@@ -202,38 +202,7 @@ namespace DataGridView_Import_Excel
                             foreach (Saloon car in Cars)
                             {
                                 DataRow row1 = result.NewRow();
-                                if (car.ProjectName == "Audi Q3")
-                                {
-                                    FormatRow.Q3row(car, ref row1);
-                                }
-                                else if(car.ProjectName == "G11")
-                                {
-                                    FormatRow.G11row(car, ref row1);
-                                }
-                                else if(car.ProjectName == "G3")
-                                {
-                                    FormatRow.G3row(car, ref row1);
-                                }
-                                else if (car.ProjectName == "BR223")
-                                {
-                                    FormatRow.BR223row(car, ref row1);
-                                }
-                                else if(car.ProjectName == "SK38")
-                                {
-                                    FormatRow.SK38row(car, ref row1);
-                                }
-                                else if(car.ProjectName == "BMWhiga")
-                                {
-                                    FormatRow.BMWhiga(car, ref row1);
-                                }
-                                else if( car.ProjectName == "BMWvoga")
-                                {
-                                    FormatRow.BMWvoga(car, ref row1);
-                                }
-                                row1["Коефіцієнт/кількість компонентів"] =  car.Coef;
-                                row1["Кількість компонент помножено на середній на одну штуку"] = Math.Round(car.Coef * car.AVGtime, 3);
-                                row1["Prod. sets planned"] = Math.Round( 480/ (car.Coef * car.AVGtime),3);
-                                //row1["Кількість комлектних салонів"] = car.CompleteSaloons();
+                                car.CreateRow(ref row1);
                                 result.Rows.Add(row1);
                             }
 
