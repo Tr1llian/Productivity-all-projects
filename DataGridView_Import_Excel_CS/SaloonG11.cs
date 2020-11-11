@@ -50,6 +50,12 @@ namespace Productivity
             row1["Коефіцієнт/кількість компонентів"] = Coef;
             row1["Кількість компонент помножено на середній на одну штуку"] = Math.Round(Coef * AvgTime(), 3);
             row1["Prod. sets planned"] = Math.Round(480 / (Coef * AvgTime()), 3);
+            row1["Кількість бригад"] = lines;
+            row1["Кількість днів"] = days;
+            row1["Кількість бригад soll"] = lines * days;
+            row1["Кількість бригад ist"] = UniqueLines();
+            row1["Коефіцієнт"] = Math.Round(PartTime(UniqueLines(), lines * days), 3);
+            row1["дні"] = Math.Round(PartTime(UniqueLines(), lines * days) * days, 3);
 
         }
 
@@ -65,6 +71,15 @@ namespace Productivity
 
         public override void ParseExcel(DataRow row)
         {
+            if (Convert.ToInt32(row[3].ToString()) >= 5000000)
+            {
+                LineDay l = new LineDay(Convert.ToInt32(row[2].ToString()), row[0].ToString());
+                if (!LD.Contains(l))
+                {
+                    LD.Add(l);
+                }
+            }
+
             if (row[6].ToString().ToUpper().Contains("FC"))
             {
                 if (Convert.ToInt32(row[3].ToString()) >= 5000000)
@@ -112,6 +127,11 @@ namespace Productivity
             }
         }
 
+        public override void InitLines()
+        {
+            throw new NotImplementedException();
+        }
+
         public override double TimeSaloon()
         {
             if (RBtime == 0 || RCtime == 0)
@@ -127,6 +147,11 @@ namespace Productivity
                 Double percent = (double)(RC40time / (RC40time + RC100time));
                 return (PartTime(FCtime, FCcount)) * 2 + 2 * (PartTime(FBtime, FBcount)) + 2 * (PartTime(RBtime, RBcount)) + (1 - percent) * (RC100time / RC100count) + percent * (2 * RC40time / RC40count);
             }
+        }
+
+        public override int UniqueLines()
+        {
+            return LD.Count;
         }
     }
 }

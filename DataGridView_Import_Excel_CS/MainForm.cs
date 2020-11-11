@@ -128,8 +128,6 @@ namespace DataGridView_Import_Excel
                             Saloon Q3 = new SaloonQ3("Audi Q3");
                             Saloon G11 = new SaloonG11("G11");
                             Saloon G3 = new SaloonG3("G3");
-                            
-
                             Saloon BR223 = new SaloonBR223("BR223");
                             Saloon Skoda = new SaloonSK38("SK38");
 
@@ -158,10 +156,26 @@ namespace DataGridView_Import_Excel
                                     Skoda.ParseExcel(row);
                                 }
                             }
+
                             Saloon BMWhiga = new SaloonBMWhiga(G11,"BMWhiga");
                             Saloon BMWvoga = new SaloonBMWvoga(G11, G3, "BMWvoga");
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                if (row[6].ToString().ToUpper().Contains("G1") || row[6].ToString().ToUpper().Contains("G3Y") || row[6].ToString().ToUpper().Contains("F90"))
+                                {
+                                    if (row[6].ToString().ToUpper().Contains("RC") || row[6].ToString().ToUpper().Contains("RB"))
+                                    {
+                                        BMWhiga.ParseExcel(row);
+                                    }
+                                    else if (row[6].ToString().ToUpper().Contains("FC") || row[6].ToString().ToUpper().Contains("FB"))
+                                    {
+                                        BMWvoga.ParseExcel(row);
+                                    }
+                                }
+                            }
 
-                            DataTable result = new DataTable();
+
+                                    DataTable result = new DataTable();
                             result.Clear();
                             result.Columns.Add("Проект");
                             result.Columns.Add("Кількість чохлів").DataType = typeof(string);
@@ -173,7 +187,12 @@ namespace DataGridView_Import_Excel
                             result.Columns.Add("Коефіцієнт/кількість компонентів").DataType = typeof(double);
                             result.Columns.Add("Кількість компонент помножено на середній на одну штуку").DataType=typeof(double);
                             result.Columns.Add("Prod. sets planned").DataType = typeof(double);
-                            //result.Columns.Add("Кількість комлектних салонів");
+                            result.Columns.Add("Кількість бригад").DataType = typeof(int);
+                            result.Columns.Add("Кількість днів").DataType = typeof(int);
+                            result.Columns.Add("Кількість бригад soll").DataType = typeof(int);
+                            result.Columns.Add("Кількість бригад ist").DataType = typeof(int);
+                            result.Columns.Add("Коефіцієнт").DataType = typeof(double);
+                            result.Columns.Add("Дні").DataType = typeof(double);
                             List<Saloon> Cars = new List<Saloon>();
 
                             Q3.Coef = 9.0;
@@ -197,6 +216,8 @@ namespace DataGridView_Import_Excel
                             Skoda.Coef = 3.0;
                             Cars.Add(Skoda);
 
+                            LinesDayCount LD =new LinesDayCount(Cars);
+                            LD.ShowDialog();
 
 
                             foreach (Saloon car in Cars)

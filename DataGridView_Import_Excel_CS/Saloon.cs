@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using System.Collections.Generic;
+using System.Data;
 
 namespace Productivity
 {
@@ -7,6 +9,12 @@ namespace Productivity
         public double FCtime, FBtime, RBtime, RCtime, RB40time, RB60time, RC40time, RC60time, SPtime, RB20time, RC100time, RB100time;
         public int FCcount, FBcount, RBcount, RCcount, RB40count, RB60count, RC40count, RC60count, SPcount, RB20count, RC100count, RB100count;
 
+        public int lines = 0;
+        public int days = 5;
+        public List<LineDay> LD = new List<LineDay>();
+
+        public abstract void InitLines();
+        public abstract int UniqueLines();
         public string ProjectName { get; set; }
         public double Coef { get; set; }
         public abstract void ParseExcel(DataRow row);

@@ -64,6 +64,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DGVPrinter.cs" />
+    <Compile Include="LineDay.cs" />
+    <Compile Include="LinesDayCount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LinesDayCount.Designer.cs">
+      <DependentUpon>LinesDayCount.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginGW.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +110,9 @@
     <Compile Include="SaloonG3.cs" />
     <Compile Include="SaloonQ3.cs" />
     <Compile Include="SaloonSK38.cs" />
+    <EmbeddedResource Include="LinesDayCount.resx">
+      <DependentUpon>LinesDayCount.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoginGW.resx">
       <DependentUpon>LoginGW.cs</DependentUpon>
     </EmbeddedResource>
@@ -138,6 +148,7 @@
   <ItemGroup>
     <Content Include="BADER %281%29.ico" />
     <Content Include="Resources\Excel.png" />
+    <Content Include="Settings.xml" />
     <None Include="Resources\OK.jpg" />
   </ItemGroup>
   <ItemGroup>

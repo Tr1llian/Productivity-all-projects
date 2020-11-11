@@ -1,10 +1,8 @@
-﻿using DataGridView_Import_Excel;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace Productivity
 {
@@ -13,6 +11,7 @@ namespace Productivity
         public SaloonQ3(string name)
         {
             ProjectName = name;
+            InitLines();
         }
 
         public override double AvgTime()
@@ -57,6 +56,12 @@ namespace Productivity
             row1["Коефіцієнт/кількість компонентів"] = Coef;
             row1["Кількість компонент помножено на середній на одну штуку"] = Math.Round(Coef * AvgTime(), 3);
             row1["Prod. sets planned"] = Math.Round(480 / (Coef * AvgTime()), 3);
+            row1["Кількість бригад"] = lines;
+            row1["Кількість днів"] = days;
+            row1["Кількість бригад soll"] = lines * days;
+            row1["Кількість бригад ist"] = UniqueLines();
+            row1["Коефіцієнт"] = Math.Round(PartTime(UniqueLines(), lines * days), 3);
+            row1["дні"] = Math.Round(PartTime(UniqueLines(), lines * days) * days, 3);
         }
 
         public override double GeneralCount()
@@ -71,6 +76,15 @@ namespace Productivity
 
         public override void ParseExcel(DataRow row)
         {
+            LineDay l = new LineDay(Convert.ToInt32(row[2].ToString()), row[0].ToString());
+            if (Convert.ToInt32(row[3].ToString()) >= 5000000)
+            {
+                if (!LD.Contains(l))
+                {
+                    LD.Add(l);
+                }
+            }
+
             if (row[6].ToString().Contains("FC"))
             {
                 if (Convert.ToInt32(row[3].ToString()) >= 5000000)
@@ -303,6 +317,40 @@ namespace Productivity
                     return 0;
                 }
             }
+        }
+
+        public override void InitLines()
+        {
+            string fileName = Path.Combine(Application.StartupPath, "Settings.xml");
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(fileName);
+            XmlElement xRoot = xDoc.DocumentElement;
+            foreach (XmlNode xnode in xRoot)
+            {
+                // отримуємо атрибут name
+                if (xnode.Attributes.Count > 0)
+                {
+                    XmlNode attr = xnode.Attributes.GetNamedItem("name");
+                    if (attr != null)
+                        Console.WriteLine(attr.Value);
+                }
+                // обходимо всі дочірні елементи user
+                foreach (XmlNode childnode in xnode.ChildNodes)
+                {
+                    // Якщо вузол - company
+                    if (childnode.Name == "Q3")
+                    {
+                        lines = Convert.ToInt32(childnode.InnerText.ToString());
+
+                    }
+                }
+
+            }
+        }
+
+        public override int UniqueLines()
+        {
+            return LD.Count;
         }
     }
 }
