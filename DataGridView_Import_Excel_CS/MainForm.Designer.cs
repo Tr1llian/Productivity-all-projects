@@ -1,4 +1,7 @@
-﻿namespace DataGridView_Import_Excel
+﻿using System;
+using System.Windows.Forms;
+
+namespace DataGridView_Import_Excel
 {
     partial class Form1
     {
@@ -131,8 +134,13 @@
 
         }
 
+        private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
         #endregion
-        
+
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button btnSelect;

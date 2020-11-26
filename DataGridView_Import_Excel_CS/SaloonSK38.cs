@@ -59,8 +59,8 @@ namespace Productivity
             row1["Кількість днів"] = days;
             row1["Кількість бригад soll"] = lines * days;
             row1["Кількість бригад ist"] = UniqueLines();
-            row1["Коефіцієнт"] =Math.Round (PartTime(UniqueLines(),lines * days),3);
-            row1["дні"] =Math.Round( PartTime(UniqueLines(), lines * days ) * days,3);
+            row1["Коефіцієнт"] = Math.Round(PartTime(UniqueLines(), lines * days), 3);
+            row1["дні"] = Math.Round(PartTime(UniqueLines(), lines * days) * days, 3);
         }
 
         public override double GeneralCount()

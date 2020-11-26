@@ -1,6 +1,10 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace Productivity
 {
@@ -16,6 +20,40 @@ namespace Productivity
         public abstract void InitLines();
         public abstract int UniqueLines();
         public string ProjectName { get; set; }
+
+        public void UpdateLines(int b)
+        {
+            lines = b;
+            string fileName = Path.Combine(Application.StartupPath, "Settings.xml");
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(fileName);
+            XmlElement xRoot = xDoc.DocumentElement;
+            foreach (XmlNode xnode in xRoot)
+            {
+                // отримуємо атрибут name
+                if (xnode.Attributes.Count > 0)
+                {
+                    XmlNode attr = xnode.Attributes.GetNamedItem("name");
+                    if (attr != null)
+                        Console.WriteLine(attr.Value);
+                }
+                // обходимо всі дочірні елементи 
+                foreach (XmlNode childnode in xnode.ChildNodes)
+                {
+                    if(childnode.Attributes[0].Value==ProjectName.ToString())
+                    {
+                        childnode.InnerText = b.ToString();
+                    }
+                }
+                xDoc.Save("Settings.xml");
+            }
+        }
+
+        public void UpdateDays(int day)
+        {
+            days = day;
+        }
+
         public double Coef { get; set; }
         public abstract void ParseExcel(DataRow row);
         public abstract double TimeSaloon();

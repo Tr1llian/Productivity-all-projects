@@ -61,7 +61,7 @@ namespace Productivity
 
         public override void ParseExcel(DataRow row)
         {
-            Console.WriteLine("Not needed to parse");
+            //Console.WriteLine("Not needed to parse");
             if (Convert.ToInt32(row[3].ToString()) >= 5000000)
             {
                 LineDay l = new LineDay(Convert.ToInt32(row[2].ToString()), row[0].ToString());

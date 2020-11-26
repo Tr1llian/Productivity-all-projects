@@ -220,9 +220,9 @@ namespace DGVPrinterHelper //AllocationRequest
                     DGVPrinter.ImbeddedImage ii = (DGVPrinter.ImbeddedImage)Convert.ChangeType(t, typeof(DGVPrinter.ImbeddedImage));
                     // Fix - DrawImageUnscaled was actually scaling the images!!?! Oh well...
                     //g.DrawImageUnscaled(ii.theImage, ii.upperleft(pagewidth, pageheight, margins));
-                    g.DrawImage(ii.theImage,
-                        new Rectangle(ii.upperleft(pagewidth, pageheight, margins),
-                        new Size(ii.theImage.Width, ii.theImage.Height)));
+                    g.DrawImage(ii.TheImage,
+                        new Rectangle(ii.Upperleft(pagewidth, pageheight, margins),
+                        new Size(ii.TheImage.Width, ii.TheImage.Height)));
                 }
             }
         }
@@ -248,27 +248,26 @@ namespace DGVPrinterHelper //AllocationRequest
         #region Internal Classes
 
         // Identify the reason for a new page when tracking rows
-        enum paging { keepgoing, outofroom, datachange };
+        enum Paging { keepgoing, outofroom, datachange };
 
         // Allow the user to provide images that will be printed as either logos in the
         // header and/or footer or watermarked as in printed behind the text.
         public class ImbeddedImage
         {
-            public Image theImage { get; set; }
+            public Image TheImage { get; set; }
             public Alignment ImageAlignment { get; set; }
             public Location ImageLocation { get; set; }
             public Int32 ImageX { get; set; }
             public Int32 ImageY { get; set; }
 
-            internal Point upperleft(int pagewidth, int pageheight, Margins margins)
+            internal Point Upperleft(int pagewidth, int pageheight, Margins margins)
             {
-                int y = 0;
-                int x = 0;
 
                 // if we've been given an absolute location, just use it
                 if (ImageLocation == Location.Absolute)
                     return new Point(ImageX, ImageY);
 
+                int y;
                 // set the y location based on header or footer
                 switch (ImageLocation)
                 {
@@ -276,12 +275,13 @@ namespace DGVPrinterHelper //AllocationRequest
                         y = margins.Top;
                         break;
                     case Location.Footer:
-                        y = pageheight - theImage.Height - margins.Bottom;
+                        y = pageheight - TheImage.Height - margins.Bottom;
                         break;
                     default:
                         throw new ArgumentException(String.Format("Unkown value: {0}", ImageLocation));
                 }
 
+                int x;
                 // set the x location based on left,right,center
                 switch (ImageAlignment)
                 {
@@ -289,10 +289,10 @@ namespace DGVPrinterHelper //AllocationRequest
                         x = margins.Left;
                         break;
                     case Alignment.Center:
-                        x = (int)(pagewidth / 2 - theImage.Width / 2) + margins.Left;
+                        x = (int)(pagewidth / 2 - TheImage.Width / 2) + margins.Left;
                         break;
                     case Alignment.Right:
-                        x = (int)(pagewidth - theImage.Width) + margins.Left;
+                        x = (int)(pagewidth - TheImage.Width) + margins.Left;
                         break;
                     case Alignment.NotSet:
                         x = ImageX;
@@ -329,9 +329,9 @@ namespace DGVPrinterHelper //AllocationRequest
             public List<float> colwidthsoverride;
             public float coltotalwidth;
             public Margins margins;
-            private int pageWidth;
+            private readonly int pageWidth;
 
-            public int printWidth
+            public int PrintWidth
             {
                 get { return pageWidth - margins.Left - margins.Right; }
             }
@@ -353,7 +353,7 @@ namespace DGVPrinterHelper //AllocationRequest
         }
 
         // class to identify row data for printing
-        public class rowdata
+        public class Rowdata
         {
             public DataGridViewRow row = null;
             public float height = 0;
@@ -378,7 +378,7 @@ namespace DGVPrinterHelper //AllocationRequest
 
         // print status items
         Boolean EmbeddedPrinting = false;
-        List<rowdata> rowstoprint;
+        List<Rowdata> rowstoprint;
         IList colstoprint;          // divided into pagesets for printing
         int lastrowprinted = -1;
         int currentrow = -1;
@@ -404,7 +404,6 @@ namespace DGVPrinterHelper //AllocationRequest
         private float colheaderheight = 0;
         //private List<float> rowheights;
         private List<float> colwidths;
-        private List<List<SizeF>> cellsizes;
 
         #endregion
 
@@ -498,7 +497,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <summary>
         /// expose settings for the PrintDialog displayed to the user
         /// </summary>
-        private PrintDialogSettingsClass printDialogSettings = new PrintDialogSettingsClass();
+        private readonly PrintDialogSettingsClass printDialogSettings = new PrintDialogSettingsClass();
         public PrintDialogSettingsClass PrintDialogSettings
         {
             get { return printDialogSettings; }
@@ -517,7 +516,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <summary>
         /// Allow access to the underlying print document
         /// </summary>
-        public PrintDocument printDocument
+        public PrintDocument PrintDocument
         {
             get { return printDoc; }
             set { printDoc = value; }
@@ -1262,7 +1261,7 @@ namespace DGVPrinterHelper //AllocationRequest
             // if we don't already have a header cell format
             if ((null != grid) && (null == rowheadercellformat))
             {
-                buildstringformat(ref rowheadercellformat, grid.Rows[0].HeaderCell.InheritedStyle,
+                Buildstringformat(ref rowheadercellformat, grid.Rows[0].HeaderCell.InheritedStyle,
                     headercellalignment, StringAlignment.Near, headercellformatflags,
                     StringTrimming.Word);
             }
@@ -1288,7 +1287,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <summary>
         /// Allow override of the header cell format object
         /// </summary>
-        private Dictionary<string, DataGridViewCellStyle> columnheaderstyles =
+        private readonly Dictionary<string, DataGridViewCellStyle> columnheaderstyles =
             new Dictionary<string, DataGridViewCellStyle>();
         public Dictionary<string, DataGridViewCellStyle> ColumnHeaderStyles
         {
@@ -1305,7 +1304,7 @@ namespace DGVPrinterHelper //AllocationRequest
             // if we don't already have a header cell format
             if ((null != grid) && (null == columnheadercellformat))
             {
-                buildstringformat(ref columnheadercellformat, grid.Columns[0].HeaderCell.InheritedStyle,
+                Buildstringformat(ref columnheadercellformat, grid.Columns[0].HeaderCell.InheritedStyle,
                     headercellalignment, StringAlignment.Near, headercellformatflags,
                     StringTrimming.Word);
             }
@@ -1355,7 +1354,7 @@ namespace DGVPrinterHelper //AllocationRequest
             // if we don't already have a cell format
             if ((null != grid) && (null == cellformat))
             {
-                buildstringformat(ref cellformat, grid.Rows[0].Cells[0].InheritedStyle,
+                Buildstringformat(ref cellformat, grid.Rows[0].Cells[0].InheritedStyle,
                     cellalignment, StringAlignment.Near, cellformatflags,
                     StringTrimming.Word);
             }
@@ -1394,8 +1393,8 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <summary>
         /// allow the user to override the column width calcs with their own defaults
         /// </summary>
-        private List<float> colwidthsoverride = new List<float>();
-        private Dictionary<string, float> publicwidthoverrides = new Dictionary<string, float>();
+        private readonly List<float> colwidthsoverride = new List<float>();
+        private readonly Dictionary<string, float> publicwidthoverrides = new Dictionary<string, float>();
         public Dictionary<string, float> ColumnWidths
         {
             get { return publicwidthoverrides; }
@@ -1404,7 +1403,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <summary>
         /// Allow per column style overrides
         /// </summary>
-        private Dictionary<string, DataGridViewCellStyle> colstyles =
+        private readonly Dictionary<string, DataGridViewCellStyle> colstyles =
             new Dictionary<string, DataGridViewCellStyle>();
         public Dictionary<string, DataGridViewCellStyle> ColumnStyles
         {
@@ -1414,7 +1413,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <summary>
         /// Allow per column style overrides
         /// </summary>
-        private Dictionary<string, DataGridViewCellStyle> altrowcolstyles =
+        private readonly Dictionary<string, DataGridViewCellStyle> altrowcolstyles =
             new Dictionary<string, DataGridViewCellStyle>();
         public Dictionary<string, DataGridViewCellStyle> AlternatingRowColumnStyles
         {
@@ -1425,8 +1424,8 @@ namespace DGVPrinterHelper //AllocationRequest
         /// Allow the user to set columns that appear on every pageset. Only used when 
         /// the printout is wider than one page.
         /// </summary>
-        private List<int> fixedcolumns = new List<int>();
-        private List<string> fixedcolumnnames = new List<string>();
+        private readonly List<int> fixedcolumns = new List<int>();
+        private readonly List<string> fixedcolumnnames = new List<string>();
         public List<string> FixedColumns
         {
             get { return fixedcolumnnames; }
@@ -1435,7 +1434,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <summary>
         /// List of columns to not display in the grid view printout.
         /// </summary>
-        private List<String> hidecolumns = new List<string>();
+        private readonly List<String> hidecolumns = new List<string>();
         public List<String> HideColumns
         {
             get { return hidecolumns; }
@@ -1567,8 +1566,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <param name="e"></param>
         protected virtual void OnCellOwnerDraw(DGVCellDrawingEventArgs e)
         {
-            if (null != OwnerDraw)
-                OwnerDraw(this, e);
+            OwnerDraw?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1661,13 +1659,13 @@ namespace DGVPrinterHelper //AllocationRequest
             footerspacing = 0;
 
             // Create string formatting objects
-            buildstringformat(ref titleformat, null, StringAlignment.Center, StringAlignment.Center,
+            Buildstringformat(ref titleformat, null, StringAlignment.Center, StringAlignment.Center,
                 StringFormatFlags.NoWrap | StringFormatFlags.LineLimit | StringFormatFlags.NoClip, StringTrimming.Word);
-            buildstringformat(ref subtitleformat, null, StringAlignment.Center, StringAlignment.Center,
+            Buildstringformat(ref subtitleformat, null, StringAlignment.Center, StringAlignment.Center,
                 StringFormatFlags.NoWrap | StringFormatFlags.LineLimit | StringFormatFlags.NoClip, StringTrimming.Word);
-            buildstringformat(ref footerformat, null, StringAlignment.Center, StringAlignment.Center,
+            Buildstringformat(ref footerformat, null, StringAlignment.Center, StringAlignment.Center,
                 StringFormatFlags.NoWrap | StringFormatFlags.LineLimit | StringFormatFlags.NoClip, StringTrimming.Word);
-            buildstringformat(ref pagenumberformat, null, StringAlignment.Far, StringAlignment.Center,
+            Buildstringformat(ref pagenumberformat, null, StringAlignment.Far, StringAlignment.Center,
                 StringFormatFlags.NoWrap | StringFormatFlags.LineLimit | StringFormatFlags.NoClip, StringTrimming.Word);
 
             // Set these formatting objects to null to flag whether or not they were set by the caller
@@ -1761,17 +1759,19 @@ namespace DGVPrinterHelper //AllocationRequest
         {
             if (EnableLogging) Logger.LogInfoMsg("DisplayPrintDialog process started");
             // create new print dialog and set options
-            PrintDialog pd = new PrintDialog();
-            pd.UseEXDialog = printDialogSettings.UseEXDialog;
-            pd.AllowSelection = printDialogSettings.AllowSelection;
-            pd.AllowSomePages = printDialogSettings.AllowSomePages;
-            pd.AllowCurrentPage = printDialogSettings.AllowCurrentPage;
-            pd.AllowPrintToFile = printDialogSettings.AllowPrintToFile;
-            pd.ShowHelp = printDialogSettings.ShowHelp;
-            pd.ShowNetwork = printDialogSettings.ShowNetwork;
+            PrintDialog pd = new PrintDialog
+            {
+                UseEXDialog = printDialogSettings.UseEXDialog,
+                AllowSelection = printDialogSettings.AllowSelection,
+                AllowSomePages = printDialogSettings.AllowSomePages,
+                AllowCurrentPage = printDialogSettings.AllowCurrentPage,
+                AllowPrintToFile = printDialogSettings.AllowPrintToFile,
+                ShowHelp = printDialogSettings.ShowHelp,
+                ShowNetwork = printDialogSettings.ShowNetwork,
 
-            //// setup print dialog with internal setttings
-            pd.Document = printDoc;
+                //// setup print dialog with internal setttings
+                Document = printDoc
+            };
             if (!String.IsNullOrEmpty(printerName))
                 printDoc.PrinterSettings.PrinterName = printerName;
 
@@ -1855,22 +1855,19 @@ namespace DGVPrinterHelper //AllocationRequest
         public Boolean EmbeddedPrint(DataGridView dgv, Graphics g, Rectangle area)
         {
             if (EnableLogging) Logger.LogInfoMsg("EmbeddedPrint process started");
-            // verify we've been set up properly
-            if ((null == dgv))
-                throw new Exception("Null Parameter passed to DGVPrinter.");
 
             // set the embedded print flag
             EmbeddedPrinting = true;
 
             // save the grid we're printing
-            this.dgv = dgv;
+            this.dgv = dgv ?? throw new Exception("Null Parameter passed to DGVPrinter.");
 
             //-----------------------------------------------------------------
             // Force setting for embedded printing
             //-----------------------------------------------------------------
 
             // set margins so we print within the provided area
-            Margins saveMargins = PrintMargins;
+            _ = PrintMargins;
             PrintMargins.Top = area.Top;
             PrintMargins.Bottom = 0;
             PrintMargins.Left = area.Left;
@@ -1902,22 +1899,19 @@ namespace DGVPrinterHelper //AllocationRequest
         public void EmbeddedPrintMultipageSetup(DataGridView dgv, Rectangle area)
         {
             if (EnableLogging) Logger.LogInfoMsg("EmbeddedPrintMultipageSetup process started");
-            // verify we've been set up properly
-            if ((null == dgv))
-                throw new Exception("Null Parameter passed to DGVPrinter.");
 
             // set the embedded print flag
             EmbeddedPrinting = true;
 
             // save the grid we're printing
-            this.dgv = dgv;
+            this.dgv = dgv ?? throw new Exception("Null Parameter passed to DGVPrinter.");
 
             //-----------------------------------------------------------------
             // Force setting for embedded printing
             //-----------------------------------------------------------------
 
             // set margins so we print within the provided area
-            Margins saveMargins = PrintMargins;
+            _ = PrintMargins;
             PrintMargins.Top = area.Top;
             PrintMargins.Bottom = 0;
             PrintMargins.Left = area.Left;
@@ -2019,15 +2013,15 @@ namespace DGVPrinterHelper //AllocationRequest
             // explicitly set by the caller
             //-----------------------------------------------------------------
             if (null == columnheadercellformat)
-                buildstringformat(ref columnheadercellformat, dgv.Columns[0].HeaderCell.InheritedStyle,
+                Buildstringformat(ref columnheadercellformat, dgv.Columns[0].HeaderCell.InheritedStyle,
                     headercellalignment, StringAlignment.Near, headercellformatflags,
                     StringTrimming.Word);
             if (null == rowheadercellformat)
-                buildstringformat(ref rowheadercellformat, RowHeaderCellStyle,
+                Buildstringformat(ref rowheadercellformat, RowHeaderCellStyle,
                     headercellalignment, StringAlignment.Near, headercellformatflags,
                     StringTrimming.Word);
             if (null == cellformat)
-                buildstringformat(ref cellformat, dgv.DefaultCellStyle,
+                Buildstringformat(ref cellformat, dgv.DefaultCellStyle,
                     cellalignment, StringAlignment.Near, cellformatflags,
                     StringTrimming.Word);
 
@@ -2122,7 +2116,7 @@ namespace DGVPrinterHelper //AllocationRequest
             //-----------------------------------------------------------------
 
             // Measure the print area
-            measureprintarea(printDoc.PrinterSettings.CreateMeasurementGraphics());
+            Measureprintarea(printDoc.PrinterSettings.CreateMeasurementGraphics());
 
             // Count the pages
             totalpages = Pagination();
@@ -2167,6 +2161,8 @@ namespace DGVPrinterHelper //AllocationRequest
         /// </summary>
         private void SetupPrintRange()
         {
+            SortedList tempcolstoprint;
+
             //-----------------------------------------------------------------
             // set up the rows and columns to print
             //
@@ -2174,20 +2170,18 @@ namespace DGVPrinterHelper //AllocationRequest
             //  have the selected items pushed in the *in the order they were selected*
             //  i.e. not the order you want to print them in!
             //-----------------------------------------------------------------
-            SortedList temprowstoprint = null;
-            SortedList tempcolstoprint = null; 
-
+            SortedList temprowstoprint;
             // rows to print (handles "selection" and "current page" options
             if (PrintRange.Selection == printRange)
             {
-                temprowstoprint = new SortedList(dgv.SelectedCells.Count);
-                tempcolstoprint = new SortedList(dgv.SelectedCells.Count); 
+                _ = new SortedList(dgv.SelectedCells.Count);
+                _ = new SortedList(dgv.SelectedCells.Count);
 
                 //if DGV has rows selected, it's easy, selected rows and all visible columns
                 if (0 != dgv.SelectedRows.Count)
                 {
-                    temprowstoprint = new SortedList(dgv.SelectedRows.Count);
-                    tempcolstoprint = new SortedList(dgv.Columns.Count); 
+                    _ = new SortedList(dgv.SelectedRows.Count);
+                    tempcolstoprint = new SortedList(dgv.Columns.Count);
 
                     // sort the rows into index order
                     temprowstoprint = new SortedList(dgv.SelectedRows.Count);
@@ -2202,11 +2196,11 @@ namespace DGVPrinterHelper //AllocationRequest
                 else if (0 != dgv.SelectedColumns.Count)
                 {
                     temprowstoprint = new SortedList(dgv.Rows.Count);
-                    tempcolstoprint = new SortedList(dgv.SelectedColumns.Count); 
+                    tempcolstoprint = new SortedList(dgv.SelectedColumns.Count);
 
-                    foreach (DataGridViewRow row in dgv.Rows) 
+                    foreach (DataGridViewRow row in dgv.Rows)
                         if (row.Visible && !row.IsNewRow)
-                           temprowstoprint.Add(row.Index, row);
+                            temprowstoprint.Add(row.Index, row);
 
                     foreach (DataGridViewColumn col in dgv.SelectedColumns)
                         if (col.Visible)
@@ -2277,8 +2271,8 @@ namespace DGVPrinterHelper //AllocationRequest
             }
 
             // move rows and columns into global containers
-            rowstoprint = new List<rowdata>(temprowstoprint.Count);
-            foreach (object item in temprowstoprint.Values) rowstoprint.Add(new rowdata() { row = (DataGridViewRow)item });
+            rowstoprint = new List<Rowdata>(temprowstoprint.Count);
+            foreach (object item in temprowstoprint.Values) rowstoprint.Add(new Rowdata() { row = (DataGridViewRow)item });
 
             colstoprint = new List<DataGridViewColumn>(tempcolstoprint.Count);
             foreach (object item in tempcolstoprint.Values) colstoprint.Add(item);
@@ -2306,7 +2300,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <param name="flags">String format flags</param>
         /// <param name="trim">Override string trimming flags</param>
         /// <returns></returns>
-        private void buildstringformat(ref StringFormat format, DataGridViewCellStyle controlstyle,
+        private void Buildstringformat(ref StringFormat format, DataGridViewCellStyle controlstyle,
             StringAlignment alignment, StringAlignment linealignment, StringFormatFlags flags,
             StringTrimming trim)
         {
@@ -2350,7 +2344,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <param name="basewidth">Initial width for size calculation</param>
         /// <param name="format">Computed string format for cell data</param>
         /// <returns>Size of printed cell</returns>
-        private SizeF calccellsize(Graphics g, DataGridViewCell cell, DataGridViewCellStyle cellstyle, 
+        private SizeF Calccellsize(Graphics g, DataGridViewCell cell, DataGridViewCellStyle cellstyle, 
             float basewidth, float overridewidth, StringFormat format)
         {
             // Start with the grid view cell size
@@ -2438,14 +2432,13 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <param name="newcolwidth">new column width</param>
         private void RecalcRowHeights(Graphics g, int colindex, float newcolwidth)
         {
-            DataGridViewCell cell = null;
-            float finalsize = 0F;
-                
+
             // search calculated cell sizes for widths larger than our new width
             for (int i = 0; i < rowstoprint.Count; i++)
             {
-                cell = ((DataGridViewRow)rowstoprint[i].row).Cells[((DataGridViewColumn)colstoprint[colindex]).Index];
+                DataGridViewCell cell = ((DataGridViewRow)rowstoprint[i].row).Cells[((DataGridViewColumn)colstoprint[colindex]).Index];
 
+                float finalsize;
                 if (RowHeightSetting.DataHeight == RowHeight)
                 {
                     StringFormat currentformat = null;
@@ -2454,12 +2447,12 @@ namespace DGVPrinterHelper //AllocationRequest
                     DataGridViewCellStyle colstyle = GetStyle(((DataGridViewRow)rowstoprint[i].row), ((DataGridViewColumn)colstoprint[colindex]));
 
                     // build the cell style and font 
-                    buildstringformat(ref currentformat, colstyle, cellformat.Alignment, cellformat.LineAlignment,
+                    Buildstringformat(ref currentformat, colstyle, cellformat.Alignment, cellformat.LineAlignment,
                         cellformat.FormatFlags, cellformat.Trimming);
 
                     // recalculate cell size using new width. This will flow data down the page and 
                     // change the row height
-                    SizeF size = calccellsize(g, cell, colstyle, newcolwidth, colwidthsoverride[colindex], currentformat);
+                    SizeF size = Calccellsize(g, cell, colstyle, newcolwidth, colwidthsoverride[colindex], currentformat);
 
                     finalsize = size.Height;
                 }
@@ -2480,7 +2473,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// the header sizes, and determine all the row heights.
         /// </summary>
         /// <param name="g">The graphics context for all measurements</param>
-        private void measureprintarea(Graphics g)
+        private void Measureprintarea(Graphics g)
         {
             int i, j;
             colwidths = new List<float>(colstoprint.Count);
@@ -2511,13 +2504,13 @@ namespace DGVPrinterHelper //AllocationRequest
                     headercolstyle = columnheaderstyles[col.Name];
 
                     // build the cell style and font 
-                    buildstringformat(ref currentformat, headercolstyle, cellformat.Alignment, cellformat.LineAlignment,
+                    Buildstringformat(ref currentformat, headercolstyle, cellformat.Alignment, cellformat.LineAlignment,
                         cellformat.FormatFlags, cellformat.Trimming);
                 }
                 else if (col.HasDefaultCellStyle)
                 {
                     // build the cell style and font 
-                    buildstringformat(ref currentformat, headercolstyle, cellformat.Alignment, cellformat.LineAlignment,
+                    Buildstringformat(ref currentformat, headercolstyle, cellformat.Alignment, cellformat.LineAlignment,
                         cellformat.FormatFlags, cellformat.Trimming);
                 }
                 else
@@ -2529,9 +2522,9 @@ namespace DGVPrinterHelper //AllocationRequest
                 // Calculate and accumulate column header width and height
                 //-------------------------------------------------------------
                 SizeF size = col.HeaderCell.Size;
-                
+
                 // deal with overridden col widths
-                float usewidth = 0;
+                float usewidth;
                 if (0 <= colwidthsoverride[i])
                     //usewidth = colwidthsoverride[i];
                     colwidths.Add(colwidthsoverride[i]);            // override means set that size
@@ -2539,14 +2532,14 @@ namespace DGVPrinterHelper //AllocationRequest
                 {
                     usewidth = col.HeaderCell.Size.Width;
                     // calculate the size of column header cells
-                    size = calccellsize(g, col.HeaderCell, headercolstyle, usewidth, colwidthsoverride[i], columnheadercellformat);
+                    size = Calccellsize(g, col.HeaderCell, headercolstyle, usewidth, colwidthsoverride[i], columnheadercellformat);
                     colwidths.Add(col.Width);                       // otherwise use the data width
                 }
                 else
                 {
                     usewidth = printWidth;
                     // calculate the size of column header cells
-                    size = calccellsize(g, col.HeaderCell, headercolstyle, usewidth, colwidthsoverride[i], columnheadercellformat);
+                    size = Calccellsize(g, col.HeaderCell, headercolstyle, usewidth, colwidthsoverride[i], columnheadercellformat);
                     colwidths.Add(size.Width);
                 }
                 
@@ -2627,7 +2620,7 @@ namespace DGVPrinterHelper //AllocationRequest
                     DataGridViewCellStyle colstyle = GetStyle(row, col); // = row.Cells[col.Index].InheritedStyle.Clone();
 
                     // build the cell style and font 
-                    buildstringformat(ref currentformat, colstyle, cellformat.Alignment, cellformat.LineAlignment,
+                    Buildstringformat(ref currentformat, colstyle, cellformat.Alignment, cellformat.LineAlignment,
                         cellformat.FormatFlags, cellformat.Trimming);
                 
                     //-------------------------------------------------------------
@@ -2652,7 +2645,7 @@ namespace DGVPrinterHelper //AllocationRequest
                         basewidth -= colstyle.Padding.Left + colstyle.Padding.Right;
 
                         // calc cell size
-                        SizeF size = calccellsize(g, row.Cells[col.Index], colstyle,
+                        SizeF size = Calccellsize(g, row.Cells[col.Index], colstyle,
                             basewidth, colwidthsoverride[j], currentformat);
 
                         basewidth = size.Width;
@@ -2670,8 +2663,10 @@ namespace DGVPrinterHelper //AllocationRequest
             //-----------------------------------------------------------------
 
             // assume everything will fit on one page
-            pagesets = new List<PageDef>();
-            pagesets.Add(new PageDef(PrintMargins, colstoprint.Count, pageWidth));
+            pagesets = new List<PageDef>
+            {
+                new PageDef(PrintMargins, colstoprint.Count, pageWidth)
+            };
             int pset = 0;
 
             // Account for row headers 
@@ -2783,7 +2778,6 @@ namespace DGVPrinterHelper //AllocationRequest
                     for (int k = 0; k < pageset.colstoprint.Count; k++)
                         columnlist = String.Format("{0},{1}", columnlist, pageset.colwidthsoverride[k]);
                     Logger.LogInfoMsg(String.Format("Overridden Column Widths: {0}", columnlist.Substring(1)));
-                    columnlist = "";
                 }
 
                 //-----------------------------------------------------------------
@@ -2802,10 +2796,8 @@ namespace DGVPrinterHelper //AllocationRequest
                     for (int k = 0; k < pageset.colstoprint.Count; k++)
                         columnlist = String.Format("{0},{1}", columnlist, pageset.colwidths[k]);
                     Logger.LogInfoMsg(String.Format("Final Column Widths: {0}", columnlist.Substring(1)));
-                    columnlist = "";
-
                     Logger.LogInfoMsg(String.Format("pageset print width is {0}, total column width to be printed is {1}", 
-                        pageset.printWidth, pageset.coltotalwidth));
+                        pageset.PrintWidth, pageset.coltotalwidth));
                 }
             }
         }
@@ -2900,8 +2892,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// </summary>
         private int Pagination()
         {
-            float pos = 0;
-            paging newpage = paging.keepgoing;
+            Paging newpage = Paging.keepgoing;
 
             //// if we're printing by pages, the total pages is the last page to 
             //// print
@@ -2918,7 +2909,7 @@ namespace DGVPrinterHelper //AllocationRequest
             staticheight -= PageNumberHeight;
 
             // Calculate where to start printing the grid for page 1
-            pos = PrintMargins.Top + HeaderHeight;
+            float pos = PrintMargins.Top + HeaderHeight;
 
             // set starting value for 'break on value change' column
             if (!String.IsNullOrEmpty(breakonvaluechange))
@@ -2932,19 +2923,19 @@ namespace DGVPrinterHelper //AllocationRequest
                 // end of page: Count the page and reset to top of next page
                 if (pos + rowstoprint[currentrow].height >= staticheight)
                 {
-                    newpage = paging.outofroom;
+                    newpage = Paging.outofroom;
                 }
 
                 // if we're breaking on value change in a column then watch that column
                 if ((!String.IsNullOrEmpty(breakonvaluechange))  &&
                     (!oldvalue.Equals(rowstoprint[currentrow].row.Cells[breakonvaluechange].EditedFormattedValue)))
                 {
-                    newpage = paging.datachange;
+                    newpage = Paging.datachange;
                     oldvalue = rowstoprint[currentrow].row.Cells[breakonvaluechange].EditedFormattedValue;
                 }
 
                 // if we need to start a new page, count it and reset counters
-                if (newpage != paging.keepgoing)
+                if (newpage != Paging.keepgoing)
                 {
                     // note page break
                     rowstoprint[currentrow].pagebreak = true;
@@ -2961,8 +2952,8 @@ namespace DGVPrinterHelper //AllocationRequest
 
                     // reset the counter - depending on setting
                     if (KeepRowsTogether
-                        || newpage == paging.datachange
-                        || (newpage == paging.outofroom && (staticheight - pos) < KeepRowsTogetherTolerance))
+                        || newpage == Paging.datachange
+                        || (newpage == Paging.outofroom && (staticheight - pos) < KeepRowsTogetherTolerance))
                     {
                         // if we are keeping rows together and too little would be showing, put whole row on next page
                         pos = rowstoprint[currentrow].height;
@@ -2993,7 +2984,7 @@ namespace DGVPrinterHelper //AllocationRequest
                 }
 
                 // reset flag
-                newpage = paging.keepgoing;
+                newpage = Paging.keepgoing;
             }
 
             // return counted pages
@@ -3052,10 +3043,10 @@ namespace DGVPrinterHelper //AllocationRequest
             float used = 0;
 
             // current row information block
-            rowdata thisrow = null;
+            Rowdata thisrow = null;
 
             // next row (lookahead) information block
-            rowdata nextrow = null;
+            Rowdata nextrow = null;
 
             //-----------------------------------------------------------------
             // scan down heights until we're off this (non-printing) page
@@ -3152,7 +3143,7 @@ namespace DGVPrinterHelper //AllocationRequest
             //-----------------------------------------------------------------
 
             // print any "absolute" images so that anything else we print will be 'on top'
-            ImbeddedImageList.Where(p => p.ImageLocation == Location.Absolute).DrawImbeddedImage(g, pagesets[currentpageset].printWidth,
+            ImbeddedImageList.Where(p => p.ImageLocation == Location.Absolute).DrawImbeddedImage(g, pagesets[currentpageset].PrintWidth,
                 pageHeight, pagesets[currentpageset].margins);
 
             //-----------------------------------------------------------------
@@ -3166,7 +3157,7 @@ namespace DGVPrinterHelper //AllocationRequest
             if (PrintHeader)
             {
                 // print any "header" images so that anything else we print will be 'on top'
-                ImbeddedImageList.Where(p => p.ImageLocation == Location.Header).DrawImbeddedImage(g, pagesets[currentpageset].printWidth,
+                ImbeddedImageList.Where(p => p.ImageLocation == Location.Header).DrawImbeddedImage(g, pagesets[currentpageset].PrintWidth,
                     pageHeight, pagesets[currentpageset].margins);
 
                 // print page number if user selected it
@@ -3177,7 +3168,7 @@ namespace DGVPrinterHelper //AllocationRequest
 
                 // print title if provided, & we're not skipping it
                 if (0 != TitleHeight && !String.IsNullOrEmpty(title))
-                    printsection(g, ref printpos, title, titlefont,
+                    Printsection(g, ref printpos, title, titlefont,
                         titlecolor, titleformat, overridetitleformat,
                         pagesets[currentpageset],
                         titlebackground, titleborder);
@@ -3187,7 +3178,7 @@ namespace DGVPrinterHelper //AllocationRequest
 
                 // print subtitle if provided
                 if (0 != SubTitleHeight && !String.IsNullOrEmpty(subtitle))
-                    printsection(g, ref printpos, subtitle, subtitlefont,
+                    Printsection(g, ref printpos, subtitle, subtitlefont,
                         subtitlecolor, subtitleformat, overridesubtitleformat,
                         pagesets[currentpageset],
                         subtitlebackground, subtitleborder);
@@ -3223,7 +3214,7 @@ namespace DGVPrinterHelper //AllocationRequest
                 thisrow = rowstoprint[currentrow];
 
                 // print the part of the row that we can, and accumulate the space used
-                used = printrow(g, printpos, (DataGridViewRow)(thisrow.row),
+                used = Printrow(g, printpos, (DataGridViewRow)(thisrow.row),
                     pagesets[currentpageset], rowstartlocation);
                 printpos += used;
 
@@ -3240,7 +3231,7 @@ namespace DGVPrinterHelper //AllocationRequest
                     if (nextrow.splitrow)
                     {
                         // print what we can on this page, print the remainder on the next page
-                        rowstartlocation += printrow(g, printpos, (DataGridViewRow)(nextrow.row),
+                        rowstartlocation += Printrow(g, printpos, (DataGridViewRow)(nextrow.row),
                             pagesets[currentpageset], rowstartlocation); 
                     }
                 }
@@ -3277,7 +3268,7 @@ namespace DGVPrinterHelper //AllocationRequest
             if (PrintFooter)
             {
                 // print any "footer" images so that anything else we print will be 'on top'
-                ImbeddedImageList.Where(p => p.ImageLocation == Location.Footer).DrawImbeddedImage(g, pagesets[currentpageset].printWidth,
+                ImbeddedImageList.Where(p => p.ImageLocation == Location.Footer).DrawImbeddedImage(g, pagesets[currentpageset].PrintWidth,
                     pageHeight, pagesets[currentpageset].margins);
                 
                 //Note: need to force printpos to the bottom of the page
@@ -3294,7 +3285,7 @@ namespace DGVPrinterHelper //AllocationRequest
                 }
 
                 if (0 != FooterHeight)
-                    printfooter(g, ref printpos, pagesets[currentpageset]);
+                    Printfooter(g, ref printpos, pagesets[currentpageset]);
             }
 
             //-----------------------------------------------------------------
@@ -3347,7 +3338,7 @@ namespace DGVPrinterHelper //AllocationRequest
                     pagenumber += parttext + (currentpageset + 1).ToString(CultureInfo.CurrentCulture);
 
                 // ... then print it
-                printsection(g, ref printpos,
+                Printsection(g, ref printpos,
                     pagenumber, pagenofont, pagenocolor, pagenumberformat,
                     overridepagenumberformat, pagesets[currentpageset],
                     null, null);
@@ -3372,15 +3363,39 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <param name="margins">The table's print margins</param>
         /// <param name="background">Background fill for the section; may be null for no background</param>
         /// <param name="border">Border for the section; may be null for no border</param>
-        private void printsection(Graphics g, ref float pos, string text,
+        private void Printsection(Graphics g, ref float pos, string text,
             Font font, Color color, StringFormat format, bool useroverride, PageDef pageset,
             Brush background, Pen border)
         {
+            if (g is null)
+            {
+                throw new ArgumentNullException(nameof(g));
+            }
+
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentException($"'{nameof(text)}' cannot be null or empty", nameof(text));
+            }
+
+            if (font is null)
+            {
+                throw new ArgumentNullException(nameof(font));
+            }
+
+            if (format is null)
+            {
+                throw new ArgumentNullException(nameof(format));
+            }
+
+            if (pageset is null)
+            {
+                throw new ArgumentNullException(nameof(pageset));
+            }
             // measure string
-            SizeF printsize = g.MeasureString(text, font, pageset.printWidth, format);
+            SizeF printsize = g.MeasureString(text, font, pageset.PrintWidth, format);
 
             // build area to print within
-            RectangleF printarea = new RectangleF((float)pageset.margins.Left, pos, (float)pageset.printWidth,
+            RectangleF printarea = new RectangleF((float)pageset.margins.Left, pos, (float)pageset.PrintWidth,
                printsize.Height);
 
             // draw a background, if a Brush has been provided
@@ -3406,11 +3421,11 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <param name="g">Graphic context to print in</param>
         /// <param name="pos">Track vertical space used; 'y' location</param>
         /// <param name="margins">The table's print margins</param>
-        private void printfooter(Graphics g, ref float pos, PageDef pageset)
+        private void Printfooter(Graphics g, ref float pos, PageDef pageset)
         {
 
             // print the footer
-            printsection(g, ref pos, footer, footerfont, footercolor, footerformat,
+            Printsection(g, ref pos, footer, footerfont, footercolor, footerformat,
                 overridefooterformat, pageset, footerbackground, footerborder);
         }
 
@@ -3439,8 +3454,8 @@ namespace DGVPrinterHelper //AllocationRequest
                 col = (DataGridViewColumn)pageset.colstoprint[i];
 
                 // calc cell width, account for columns larger than the print area!
-                float cellwidth = (pageset.colwidths[i] > pageset.printWidth - rowheaderwidth ?
-                    pageset.printWidth - rowheaderwidth : pageset.colwidths[i]);
+                float cellwidth = (pageset.colwidths[i] > pageset.PrintWidth - rowheaderwidth ?
+                    pageset.PrintWidth - rowheaderwidth : pageset.colwidths[i]);
 
                 // get column style
                 DataGridViewCellStyle style = col.HeaderCell.InheritedStyle.Clone();
@@ -3472,7 +3487,7 @@ namespace DGVPrinterHelper //AllocationRequest
         /// <param name="row">The row that will be printed</param>
         /// <param name="pageset">Current Pageset - defines columns and margins</param>
         /// <param name="startline">Line no. in row to start printing text at</param>
-        private float printrow(Graphics g, float finalpos, DataGridViewRow row, PageDef pageset,
+        private float Printrow(Graphics g, float finalpos, DataGridViewRow row, PageDef pageset,
             float startlocation)
         {
             // track printing location accross the page
@@ -3483,7 +3498,7 @@ namespace DGVPrinterHelper //AllocationRequest
             Pen lines = new Pen(dgv.GridColor, 1);
 
             // calc row width, account for columns wider than the print area!
-            float rowwidth = (pageset.coltotalwidth > pageset.printWidth ? pageset.printWidth : pageset.coltotalwidth);
+            float rowwidth = (pageset.coltotalwidth > pageset.PrintWidth ? pageset.PrintWidth : pageset.coltotalwidth);
 
             // calc row heigth in pixels to print
             float rowheight = (rowstoprint[currentrow].height - startlocation) > (staticheight - pos)
@@ -3531,21 +3546,20 @@ namespace DGVPrinterHelper //AllocationRequest
                 DataGridViewCell cell = row.Cells[col.Index];
 
                 // calc cell width, account for columns larger than the print area!
-                float cellwidth = (pageset.colwidths[i] > pageset.printWidth - rowheaderwidth ?
-                    pageset.printWidth - rowheaderwidth : pageset.colwidths[i]);
+                float cellwidth = (pageset.colwidths[i] > pageset.PrintWidth - rowheaderwidth ?
+                    pageset.PrintWidth - rowheaderwidth : pageset.colwidths[i]);
 
                 // SLG 01112010 - only draw columns with an actual width
                 if (cellwidth > 0)
                 {
                     // get DGV column style and see if we have an override for this column
                     StringFormat finalformat = null;
-                    Font cellfont = null;
                     DataGridViewCellStyle colstyle = GetStyle(row, col); // = row.Cells[col.Index].InheritedStyle.Clone(); 
 
                     // set string format
-                    buildstringformat(ref finalformat, colstyle, cellformat.Alignment, cellformat.LineAlignment,
+                    Buildstringformat(ref finalformat, colstyle, cellformat.Alignment, cellformat.LineAlignment,
                         cellformat.FormatFlags, cellformat.Trimming);
-                    cellfont = colstyle.Font;
+                    _ = colstyle.Font;
 
                     // set overall print area for this individual cell 
                     RectangleF cellprintarea = new RectangleF(xcoord, pos, cellwidth,
@@ -3771,11 +3785,11 @@ namespace DGVPrinterHelper //AllocationRequest
 
             // clipping bounds. This is the portion of the image to fit into the drawing rectangle
             Rectangle src = new Rectangle();
+            int dy;
+
 
             // calculate deltas
-            int dx = 0;
-            int dy = 0;
-
+            int dx;
             // drawn normal size, clipped to cell 
             if ((DataGridViewImageCellLayout.Normal == imagecell.ImageLayout) ||
                 (DataGridViewImageCellLayout.NotSet == imagecell.ImageLayout))

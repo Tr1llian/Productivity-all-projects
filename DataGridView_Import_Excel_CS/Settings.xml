@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <mysettings>
   <paths>
-    <Q3>39</Q3>
-    <SK38>8</SK38>
-    <BR223>18</BR223>
-    <BMWhiga>6</BMWhiga>
-    <BMWvoga>23</BMWvoga>
+    <Q3 ID="Audi Q3">39</Q3>
+    <SK38 ID="SK38">8</SK38>
+    <BR223 ID="BR223">18</BR223>
+    <BMWhiga ID="BMWhiga">6</BMWhiga>
+    <BMWvoga ID="BMWvoga">23</BMWvoga>
   </paths>
 </mysettings>

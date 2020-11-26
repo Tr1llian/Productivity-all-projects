@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6952C66B880345C8950DF84F3AEB3580"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6DEA826E7420D52EC545257E8B033F33"
         "OwnerKey" = "8:_90D93BE8E7C2E6F55FD30CA74691D37D"
         "MsmSig" = "8:_UNDEFINED"
@@ -190,6 +196,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -280,6 +294,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6952C66B880345C8950DF84F3AEB3580"
+            {
+            "SourcePath" = "8:..\\DataGridView_Import_Excel_CS\\Settings.xml"
+            "TargetName" = "8:Settings.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_B5AE1C884DDD418DBDB2AF5BACA2087F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6DEA826E7420D52EC545257E8B033F33"
@@ -513,15 +547,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ProductivityKozychi"
-        "ProductCode" = "8:{D0CC86E6-A165-4542-A3ED-1FE44F82CDF0}"
-        "PackageCode" = "8:{C1CDD2A1-2028-409B-9C37-26F27EBD743D}"
+        "ProductCode" = "8:{D9FE2C17-C568-460B-833B-94625A5E4DAE}"
+        "PackageCode" = "8:{1E60537B-9DB0-4104-9606-56D96D9218D9}"
         "UpgradeCode" = "8:{C719085C-8E23-42FB-918C-5FF10449997C}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.1.1"
         "Manufacturer" = "8:PetroMonka"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
